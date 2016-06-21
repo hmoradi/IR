@@ -196,7 +196,7 @@ map<int,float> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector
   }
   return body_confidence;
 }
-void find_matching_contours(map<int,vector<Rect>> contour_map , vector<Rect> bodies){
+map<int,float> find_matching_contours(map<int,vector<Rect>> contour_map , vector<Rect> bodies){
   map<int,map<int,vector<Rect>>> body_parts ;
   for (map<int,vector<Rect>>:: iterator it = contour_map.begin();it != contour_map.end();it++){
     for(Rect rect : it->second){
@@ -211,6 +211,7 @@ void find_matching_contours(map<int,vector<Rect>> contour_map , vector<Rect> bod
   }
   map<int,float> body_confidence = calc_confidence(body_parts,bodies);
   cout << "body confidence size " << body_confidence.size() << endl;
+  return body_confidence;
 }
 void contour_detector(Mat im, int frameN){
   map<int,vector<Rect>> contour_map;
@@ -269,16 +270,15 @@ void contour_detector(Mat im, int frameN){
     for (map<int,vector<Rect>>::iterator it = body_map.begin();it !=body_map.end(); it++){
         bodies.insert(bodies.end(),it->second.begin(),it->second.end());
     }
-   
-    for( int i = 0; i< bodies.size(); i++ )
-    {
-      Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-      //drawContours( drawing, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
-      rectangle( org_im, bodies[i].tl(), bodies[i].br(), 25, 2, 8, 0 );
+    map<int,float> body_confidence = find_matching_contours(contour_map,bodies);
+    if(body_confidence.size()>0){
+    	for( int i = 0; i< bodies.size(); i++ ){
+      		Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+      		//drawContours( drawing, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+      		rectangle( org_im, bodies[i].tl(), bodies[i].br(), 25, 2, 8, 0 );
+    	}	
     }
-    /// Show in a window
-   show_image(org_im);
-   find_matching_contours(contour_map,bodies);1;cefirt
+   	show_image(org_im);
   }
 }
 void read_from_file(string file_name){
