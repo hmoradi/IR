@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/blob.dir/src/blob.cpp.o"
-  "CMakeFiles/blob.dir/src/clipper.cpp.o"
   "blob.pdb"
   "blob"
 )

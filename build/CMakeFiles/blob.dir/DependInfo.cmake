@@ -5,7 +5,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ubuntu/Desktop/IR/src/blob.cpp" "/home/ubuntu/Desktop/IR/build/CMakeFiles/blob.dir/src/blob.cpp.o"
-  "/home/ubuntu/Desktop/IR/src/clipper.cpp" "/home/ubuntu/Desktop/IR/build/CMakeFiles/blob.dir/src/clipper.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

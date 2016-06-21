@@ -138,30 +138,6 @@ src/blob.cpp.s:
 	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/blob.cpp.s
 .PHONY : src/blob.cpp.s
 
-src/clipper.o: src/clipper.cpp.o
-.PHONY : src/clipper.o
-
-# target to build an object file
-src/clipper.cpp.o:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/clipper.cpp.o
-.PHONY : src/clipper.cpp.o
-
-src/clipper.i: src/clipper.cpp.i
-.PHONY : src/clipper.i
-
-# target to preprocess a source file
-src/clipper.cpp.i:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/clipper.cpp.i
-.PHONY : src/clipper.cpp.i
-
-src/clipper.s: src/clipper.cpp.s
-.PHONY : src/clipper.s
-
-# target to generate assembly for a file
-src/clipper.cpp.s:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/clipper.cpp.s
-.PHONY : src/clipper.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -174,9 +150,6 @@ help:
 	@echo "... src/blob.o"
 	@echo "... src/blob.i"
 	@echo "... src/blob.s"
-	@echo "... src/clipper.o"
-	@echo "... src/clipper.i"
-	@echo "... src/clipper.s"
 .PHONY : help
 
 

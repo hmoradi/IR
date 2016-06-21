@@ -72,39 +72,14 @@ CMakeFiles/blob.dir/src/blob.cpp.o.provides: CMakeFiles/blob.dir/src/blob.cpp.o.
 
 CMakeFiles/blob.dir/src/blob.cpp.o.provides.build: CMakeFiles/blob.dir/src/blob.cpp.o
 
-CMakeFiles/blob.dir/src/clipper.cpp.o: CMakeFiles/blob.dir/flags.make
-CMakeFiles/blob.dir/src/clipper.cpp.o: ../src/clipper.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/ubuntu/Desktop/IR/build/CMakeFiles $(CMAKE_PROGRESS_2)
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/blob.dir/src/clipper.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/blob.dir/src/clipper.cpp.o -c /home/ubuntu/Desktop/IR/src/clipper.cpp
-
-CMakeFiles/blob.dir/src/clipper.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/blob.dir/src/clipper.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/ubuntu/Desktop/IR/src/clipper.cpp > CMakeFiles/blob.dir/src/clipper.cpp.i
-
-CMakeFiles/blob.dir/src/clipper.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/blob.dir/src/clipper.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/ubuntu/Desktop/IR/src/clipper.cpp -o CMakeFiles/blob.dir/src/clipper.cpp.s
-
-CMakeFiles/blob.dir/src/clipper.cpp.o.requires:
-.PHONY : CMakeFiles/blob.dir/src/clipper.cpp.o.requires
-
-CMakeFiles/blob.dir/src/clipper.cpp.o.provides: CMakeFiles/blob.dir/src/clipper.cpp.o.requires
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/clipper.cpp.o.provides.build
-.PHONY : CMakeFiles/blob.dir/src/clipper.cpp.o.provides
-
-CMakeFiles/blob.dir/src/clipper.cpp.o.provides.build: CMakeFiles/blob.dir/src/clipper.cpp.o
-
 # Object files for target blob
 blob_OBJECTS = \
-"CMakeFiles/blob.dir/src/blob.cpp.o" \
-"CMakeFiles/blob.dir/src/clipper.cpp.o"
+"CMakeFiles/blob.dir/src/blob.cpp.o"
 
 # External object files for target blob
 blob_EXTERNAL_OBJECTS =
 
 blob: CMakeFiles/blob.dir/src/blob.cpp.o
-blob: CMakeFiles/blob.dir/src/clipper.cpp.o
 blob: CMakeFiles/blob.dir/build.make
 blob: /usr/lib/x86_64-linux-gnu/libopencv_videostab.so.2.4.8
 blob: /usr/lib/x86_64-linux-gnu/libopencv_ts.so.2.4.8
@@ -133,7 +108,6 @@ CMakeFiles/blob.dir/build: blob
 .PHONY : CMakeFiles/blob.dir/build
 
 CMakeFiles/blob.dir/requires: CMakeFiles/blob.dir/src/blob.cpp.o.requires
-CMakeFiles/blob.dir/requires: CMakeFiles/blob.dir/src/clipper.cpp.o.requires
 .PHONY : CMakeFiles/blob.dir/requires
 
 CMakeFiles/blob.dir/clean:

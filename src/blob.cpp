@@ -5,10 +5,10 @@
 #include <string>
 #include <fstream>
 #include "params.h"
-#include "clipper.hpp"
+
 using namespace cv;
 using namespace std;
-using namespace ClipperLib;
+
 
 int** read_frame(ifstream* infile){
     int** frame = new int*[8];

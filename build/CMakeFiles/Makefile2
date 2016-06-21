@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/ubuntu/Desktop/IR/build
 CMakeFiles/blob.dir/all:
 	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/depend
 	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/ubuntu/Desktop/IR/build/CMakeFiles  1 2
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/ubuntu/Desktop/IR/build/CMakeFiles  1
 	@echo "Built target blob"
 .PHONY : CMakeFiles/blob.dir/all
 
@@ -69,7 +69,7 @@ all: CMakeFiles/blob.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/blob.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/Desktop/IR/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/Desktop/IR/build/CMakeFiles 1
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/blob.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ubuntu/Desktop/IR/build/CMakeFiles 0
 .PHONY : CMakeFiles/blob.dir/rule
