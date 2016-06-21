@@ -1,4 +1,13 @@
+/////////////////
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <getopt.h>
+#include <signal.h>
+#include "ftdi.h"
+#include <time.h>
+#include <string.h>
+
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <sstream>
@@ -9,6 +18,156 @@
 using namespace cv;
 using namespace std;
 
+#define PacketLength 134
+struct ftdi_context *ftdi;
+int IR_array_data[8][8];
+unsigned char residue[1024] ;
+static int exitRequested = 0;
+static int frameNumber = 0;
+static long int lastTime =0;
+static int lastFrame = 0;
+static int frameRate = 0;
+
+/*
+ * sigintHandler --
+ *
+ *    SIGINT handler, so we can gracefully exit when the user hits ctrl-C.
+ */
+static void sigintHandler(int signum){
+	unsigned char buf2[1];
+	buf2[0] = '~';
+	int f = ftdi_write_data(ftdi, buf2, 1); // Asking PIC24F04KA200 microcontroller to stop sending data
+	if( f < 0)
+		printf("Error in writing data: ~ .\n");
+    exitRequested = 1;
+}
+
+//prints system time 
+long int print_time(){
+    time_t     now;
+    struct tm  ts;
+    char       buf[80];
+    time(&now);
+    // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
+    ts = *localtime(&now);
+    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
+    if((long)now - lastTime >=1){
+        frameRate = (frameNumber - lastFrame);
+        lastFrame = frameNumber;
+        lastTime = (long)now;
+    }
+    cout << "frame rate is " << frameRate << endl;
+    return (long)now;
+    
+}
+
+//Extracts serial packets from raw data received from serial port
+int find_packet_head(unsigned char *buf, int index, int len){
+    //Each serail packet starts with ***
+    int count = 0;
+    int i=0;
+    for(i=index; i< len; i++){
+        if(buf[i]=='*'){
+            count++;
+            if(count ==3){
+                return i -2;
+            }
+        }else{
+            count = 0;
+        }
+    }
+    return i;
+}
+
+//Copey source array to destinatino array starting from start_index for lenght of len
+void array_copy(unsigned char* dest, unsigned char* source,int start_index, int len){
+    
+    for (int i=0;i<len;i++){
+        dest[i] = source[start_index+i];
+    }
+}
+
+//If there is not complete packet, buffer it at residue buffer 
+void add_to_residue(unsigned char* buf, int index){
+    int last_data_index =0;
+    while(residue[last_data_index]!= 0){
+        last_data_index++;
+    }
+    int i=0;
+    while(i < index){
+        residue[last_data_index+i] = buf[index];
+        i++;
+    }
+}
+
+//Prints content of serial packet received from FTDI module
+int** print_packet(unsigned char* buf,int index){
+    frameNumber++;
+	long int epoch= print_time();    
+    int thermistor_data = ((int)buf[index + 4]<<8) | buf[index +3]; //Next 2 characters [index: 3, 4] are thermistor bytes	
+    int k = index + 5; 
+    for(int i = 0; i < 8; i++) {
+        for(int j = 0; j < 8; j++) {
+            int high_byte = buf[k+1];
+            unsigned char low_byte = buf[k];
+            int temperature_reading = (high_byte << 8) | low_byte;
+            IR_array_data[i][j] = temperature_reading;
+            k+=2;
+        }
+    }   
+    
+    //
+    int** frame = new int*[8];
+    for (int i=0;i<8;i++)
+        frame[i] = new int[8];
+    
+    for(int i = 0; i < 8; i++){     
+        if(PRINT_FRAME)
+			printf("%ld %d %d ",epoch, frameNumber,thermistor_data/16);
+        for(int j = 0; j < 8; j++){
+			if(PRINT_FRAME)
+				printf("%d ", IR_array_data[i][j]/4); //by looking at the datasheet, the LSB stands for .25 degree C.
+			frame[i][j] = IR_array_data[i][j]/4;
+		}
+        if(PRINT_FRAME)
+			printf("\n");
+    }
+    
+   
+    //
+    fflush(stdout);
+    return frame;
+}
+
+//interpret raw data
+map<int,int**> interpret_data(unsigned char *buf, int len){
+	int** frame;
+	map<int,int**> frames;
+	int index = find_packet_head(buf,0,len);
+	if(index != 0){
+        add_to_residue(buf,index);
+        frame = print_packet(residue,0);
+        frames[frameNumber] = frame;
+        memset(residue,0,sizeof residue);
+    }else{
+        if(residue[0] != 0){
+           frame = print_packet(residue,0);
+           frames[frameNumber] = frame;
+           memset(residue,0,sizeof residue);
+        }
+    }
+    while(index < len){
+        if(len - index < 131 ){
+            array_copy(residue,buf,index ,len-index);
+            return frames;
+        }
+        frame = print_packet(buf,index);
+        frames[frameNumber] = frame;
+        index+= PacketLength;
+        index = find_packet_head(buf,index,len);
+    }
+    return frames;	
+}
 
 int** read_frame(ifstream* infile){
     int** frame = new int*[8];
@@ -26,6 +185,7 @@ int** read_frame(ifstream* infile){
     }
     return NULL;
 }
+
 Mat convert_to_Mat(int** frame){
    try{
    	Mat image = Mat::zeros(8,8,CV_8UC1);
@@ -37,6 +197,7 @@ Mat convert_to_Mat(int** frame){
    		cerr << e.what() << endl;
    } 
 }
+
 Mat resize_frame(Mat im, int frameN){
 	Size size(extended_resolution,extended_resolution);
 	Mat result;
@@ -44,9 +205,10 @@ Mat resize_frame(Mat im, int frameN){
 	double min, max;
 	Point minL,maxL;
 	minMaxLoc(result,&min,&max, &minL,&maxL);
-	cout << frameN << " " << min << " " << max << endl; 
+	//cout << frameN << " " << min << " " << max << endl; 
 	return result;
 }
+
 void show_image(Mat im){
    if(!showImage)
    	   return;
@@ -65,10 +227,8 @@ void show_image(Mat im){
    }
    waitKey(100);
 }
-void blob_detect(Mat im){
-    //cout << im << endl;
-    //Mat im = imread( "../blob2.jpg", IMREAD_GRAYSCALE );
 
+void blob_detect(Mat im){
     SimpleBlobDetector::Params params;
  	
     //Change thresholds
@@ -110,7 +270,7 @@ void blob_detect(Mat im){
     // Detect blobs.
     std::vector<KeyPoint> keypoints;
     detector.detect( im, keypoints);
-    cout << keypoints.size() << endl;
+    //cout << keypoints.size() << endl;
     if(keypoints.size() >= 0){
         for (int i=0;i<keypoints.size();i++){
             cout << keypoints[i].pt.x << " " << keypoints[i].pt.y << " " << keypoints[i].size << endl; 
@@ -122,50 +282,31 @@ void blob_detect(Mat im){
         show_image(im_with_key_points);
     }
 }
-double polygonArea(double *X, double *Y, int points) {
-
-  double  area=0. ;
-  int     i, j=points-1  ;
-  for (i=0; i<points; i++) {
-    area+=(X[j]+X[i])*(Y[j]-Y[i]); j=i; 
-  }
-  return area*.5; 
-} 
 
 void find_body(Rect candidate_rect, map<int,vector<Rect>> contour_map, int thresh , int level,map<int,vector<Rect>>& body_map){
-  //  cout << "find body " << candidate_rect.x <<" " << candidate_rect.y <<" area "<<candidate_rect.area() << " th " << thresh <<" le "  << level << endl; 
   if (candidate_rect.area() >= RECTMAXAREA or candidate_rect.area() < RECTMINAREA)
         return;
   vector<Rect> rects = contour_map[thresh-1];
   for (Rect rect : rects  ){
-    //cout << "next rect is " << rect.x  <<" " << rect.y << " " << rect.area() << endl;
     if (rect.area() >= RECTMAXAREA or rect.area() < RECTMINAREA)
         continue;
-    //cout << "this one is passed 1" << endl;
     Rect intersect = candidate_rect & rect;
-    //cout << "intersected" << endl;
     if (intersect == candidate_rect){
-      //cout << "intersection is matching " << endl;
       if(level == 2){
         if (body_map.find(thresh - 1) == body_map.end()){
           body_map[thresh - 1]= vector<Rect>();
         }
         body_map[thresh-1].push_back(rect);
-        //cout << "rect is pushed back to body map at thresh " << thresh - 1 << endl;
-
       }
       else{
-        //cout << "got to next level" << endl;
         find_body(rect,contour_map,thresh -1,level + 1,body_map);  
-      }
-      
+      } 
     }
-    //cout << "intersection did not match" << endl;
   }
   rects.clear();
-  //cout << "cleared rects " << endl;
   return;
 }
+
 map<int,float> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector<Rect> bodies){
   map<int,float> body_confidence;
   for(map<int,map<int,vector<Rect>>>::iterator it = body_parts.begin();it != body_parts.end();it++){
@@ -196,6 +337,7 @@ map<int,float> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector
   }
   return body_confidence;
 }
+
 map<int,float> find_matching_contours(map<int,vector<Rect>> contour_map , vector<Rect> bodies){
   map<int,map<int,vector<Rect>>> body_parts ;
   for (map<int,vector<Rect>>:: iterator it = contour_map.begin();it != contour_map.end();it++){
@@ -210,9 +352,10 @@ map<int,float> find_matching_contours(map<int,vector<Rect>> contour_map , vector
     }
   }
   map<int,float> body_confidence = calc_confidence(body_parts,bodies);
-  cout << "body confidence size " << body_confidence.size() << endl;
+  //cout << "body confidence size " << body_confidence.size() << endl;
   return body_confidence;
 }
+
 void contour_detector(Mat im, int frameN){
   map<int,vector<Rect>> contour_map;
   Mat org_im;
@@ -263,9 +406,9 @@ void contour_detector(Mat im, int frameN){
       max_rects.clear();
   }
   
-  cout << "body map size is " <<body_map.size() << endl;
+  //cout << "body map size is " <<body_map.size() << endl;
   if(body_map.size()> 0){
-    cout << body_map.size() << endl;
+    //cout << body_map.size() << endl;
     vector<Rect> bodies ;
     for (map<int,vector<Rect>>::iterator it = body_map.begin();it !=body_map.end(); it++){
         bodies.insert(bodies.end(),it->second.begin(),it->second.end());
@@ -281,12 +424,15 @@ void contour_detector(Mat im, int frameN){
    	show_image(org_im);
   }
 }
+
 void read_from_file(string file_name){
     std::ifstream infile(input_file_name);
     int** frame = NULL;
     int frameN = 0;
     char quite = 'n';
     while(true){
+		frameN++;
+		//cout << "processing frame " << frameN << endl;
        frame = read_frame(&infile);
        if (frame == NULL)
             return;	
@@ -300,13 +446,95 @@ void read_from_file(string file_name){
        		blob_detect(extended_im);
        if(contourDetection)
        		contour_detector(extended_im,frameN);
-       frameN++;
+       
        //cin >> quite;
        if (quite == 'y')
           return;
     }
 }
-int main(int argc, char** argv ){
-    read_from_file("../8.txt");
-    return 0;
+
+int main(int argc, char **argv){
+    if(LIVE == false){
+		cout << "reading from file" << endl;
+		read_from_file("../8.txt");
+		return 0;
+	}
+    unsigned char buf[1024];
+    int f = 0, i;
+    int vid = 0x403;
+    int pid = 0x6015;
+    int baudrate = 115200;
+    int interface = INTERFACE_A; //INTERFACE_ANY;
+    int retval = EXIT_FAILURE;
+    // Init
+    if ((ftdi = ftdi_new()) == 0)
+    {
+        fprintf(stderr, "ftdi_new failed\n");
+        return EXIT_FAILURE;
+    }
+
+    fprintf(stderr,"Selecting interface.\n");
+    // Select interface
+    int debug_res = ftdi_set_interface(ftdi, INTERFACE_A);
+       
+    // Open device 
+    f = ftdi_usb_open(ftdi, vid, pid);
+    if (f < 0)
+    {
+        fprintf(stderr, "unable to open ftdi device: %d (%s)\n", f, ftdi_get_error_string(ftdi));
+        exit(-1);
+    }
+    fprintf(stderr,"FTDI device is open now.\n");
+	fprintf(stderr,"Setting up baudrate.\n");
+    // Set baudrate
+    f = ftdi_set_baudrate(ftdi, baudrate);
+    if (f < 0)
+    {
+        fprintf(stderr, "unable to set baudrate: %d (%s)\n", f, ftdi_get_error_string(ftdi));
+        exit(-1);
+    }
+	fprintf(stderr,"Baudrate (%d) set up done.\n",baudrate);
+    
+	fprintf(stderr,"Registering SIGINT handler.\n");
+	
+    signal(SIGINT, sigintHandler);
+    printf("epoch frameN Ta 1 2 3 4 5 6 7 8 9\n");
+    map<int,int**> frames;
+    while (!exitRequested)
+    {
+    	unsigned char buf2[1];
+    	buf2[0] = '*';
+    	f = ftdi_write_data(ftdi, buf2, 1); //Ask PIC24F04KA200 microcontroller to start sending data
+        memset(buf, 0, sizeof buf);
+        //usleep(1 * 10000);
+        f = ftdi_read_data(ftdi, buf, sizeof(buf));
+        if (f<0){
+            fprintf(stderr, "Something is wrong. %d bytes read\n",f);
+            usleep(1 * 1000000);
+        }
+        else if( f > 130 )
+        {
+			
+            fprintf(stderr, "read %d bytes\n", f);
+            frames = interpret_data(buf, f);
+            fprintf(stdout, "\n");
+            cout << "frames size " << frames.size() << endl;
+            for(map<int,int**>::iterator it=frames.begin();it!=frames.end();it++){
+				Mat im = convert_to_Mat(it->second);
+				Mat extended_im = resize_frame(im,it->first);
+				if(blobDetection)
+					blob_detect(extended_im);
+				if(contourDetection)
+					contour_detector(extended_im,it->first);
+            }
+            fflush(stderr);
+            fflush(stdout);
+        }
+    }
+    signal(SIGINT, SIG_DFL);
+    retval =  EXIT_SUCCESS;
+    ftdi_usb_close(ftdi);
+    do_deinit:
+    ftdi_free(ftdi);
+    return retval;
 }

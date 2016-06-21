@@ -6,8 +6,22 @@
 
 #IncludeRegexTransform: 
 
-/home/ubuntu/Desktop/IR/src/blob.cpp
+/home/pi/Desktop/IR/src/blob.cpp
 stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+getopt.h
+-
+signal.h
+-
+ftdi.h
+/home/pi/Desktop/IR/src/ftdi.h
+time.h
+-
+string.h
 -
 opencv2/opencv.hpp
 -
@@ -20,7 +34,15 @@ string
 fstream
 -
 params.h
-/home/ubuntu/Desktop/IR/src/params.h
+/home/pi/Desktop/IR/src/params.h
 
-/home/ubuntu/Desktop/IR/src/params.h
+/home/pi/Desktop/IR/src/ftdi.h
+stdint.h
+-
+sys/time.h
+-
+windows.h
+-
+
+/home/pi/Desktop/IR/src/params.h
 

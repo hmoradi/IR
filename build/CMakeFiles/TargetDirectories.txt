@@ -1,1 +1,1 @@
-/home/ubuntu/Desktop/IR/build/CMakeFiles/blob.dir
+/home/pi/Desktop/IR/build/CMakeFiles/blob.dir

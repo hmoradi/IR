@@ -1,4 +1,4 @@
-#define extended_resolution 512
+#define extended_resolution 256
 #define input_file_name "../8.txt"
 #define blobDetection false
 #define contourDetection true  // add comments to eveything and sperate in sections
@@ -26,5 +26,7 @@
 #define RECTMAXAREA 200000
 #define RECTMINAREA 5
 #define INTEREST_THRESH 1
-#define START_FRAME 40
-#define END_FRAME 150
+#define START_FRAME 100
+#define END_FRAME 200
+#define LIVE true
+#define PRINT_FRAME false

@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/clipper.dir/clipper.cpp.o  -o clipper -rdynamic 
