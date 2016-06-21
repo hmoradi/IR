@@ -290,6 +290,10 @@ void read_from_file(string file_name){
        frame = read_frame(&infile);
        if (frame == NULL)
             return;	
+       if (frameN < START_FRAME)
+       		continue; 
+       else if (frameN > END_FRAME)
+       		return;
        Mat im = convert_to_Mat(frame);
        Mat extended_im = resize_frame(im,frameN);
        if(blobDetection)
