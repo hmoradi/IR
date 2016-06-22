@@ -27,23 +27,40 @@ static int frameNumber = 0;
 static long int lastTime =0;
 static int lastFrame = 0;
 static int frameRate = 0;
+static int frameN = 0;
 
-/*
- * sigintHandler --
- *
- *    SIGINT handler, so we can gracefully exit when the user hits ctrl-C.
- */
-static void sigintHandler(int signum){
-	unsigned char buf2[1];
-	buf2[0] = '~';
-	int f = ftdi_write_data(ftdi, buf2, 1); // Asking PIC24F04KA200 microcontroller to stop sending data
-	if( f < 0)
-		printf("Error in writing data: ~ .\n");
-    exitRequested = 1;
+enum status {UNKNOWN, EMTERED,  LEFT};
+enum direction {UNKNOWNDIR, LtR , RtL};
+struct Person {
+	map<int,Body> trajectory;
+	status status_;
+	direction direction_;
+};
+struct Body {
+	Rect rect_;
+	int T ;
+	float confidence;
+};
+float calc_match_weight (Person person_ , Body body){
+	map<int,Body>::reverse_iterator last_location = person_.trajectory.rbegin();
+	double distance =  norm(last_location.rect_.tl(),body.rect_.tl())
+	float size = abs(last_location.rect_.area() - body.rect_.area()) / last_location.rect_.area(); 
+	float T = abs(las_location.T - body.T) / last_location.T;
+	return (distance + size + T)  / 3.0;
+}
+void update_people_info(map<int,Body> body_confidence , vector<person> people){
+	float match_weight ;
+	map<float , vector<>>
+	for(Person person_ :people){
+		for(map<int,Body>::iterator it = body_confidence.begin();it != body_confidence.end();it++){
+			match_weight = calc_match_weight(person_,it->second);
+			
+		}	
+	}
 }
 
 //prints system time 
-long int print_time(){
+void print_time(){
     time_t     now;
     struct tm  ts;
     char       buf[80];
@@ -51,14 +68,21 @@ long int print_time(){
     // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
     ts = *localtime(&now);
     strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
-    if((long)now - lastTime >=1){
-        frameRate = (frameNumber - lastFrame);
-        lastFrame = frameNumber;
-        lastTime = (long)now;
-    }
-    cout << "frame rate is " << frameRate << endl;
-    return (long)now;
-    
+    cout << buf <<" " << frameN << endl;
+}
+/*
+ * sigintHandler --
+ *
+ *    SIGINT handler, so we can gracefully exit when the user hits ctrl-C.
+ */
+static void sigintHandler(int signum){
+	print_time();
+	unsigned char buf2[1];
+	buf2[0] = '~';
+	int f = ftdi_write_data(ftdi, buf2, 1); // Asking PIC24F04KA200 microcontroller to stop sending data
+	if( f < 0)
+		printf("Error in writing data: ~ .\n");
+    exitRequested = 1;
 }
 
 //Extracts serial packets from raw data received from serial port
@@ -103,7 +127,10 @@ void add_to_residue(unsigned char* buf, int index){
 //Prints content of serial packet received from FTDI module
 int** print_packet(unsigned char* buf,int index){
     frameNumber++;
-	long int epoch= print_time();    
+	int** frame = new int*[8];
+    for (int i=0;i<8;i++)
+        frame[i] = new int[8];
+	//long int epoch= print_time();    
     int thermistor_data = ((int)buf[index + 4]<<8) | buf[index +3]; //Next 2 characters [index: 3, 4] are thermistor bytes	
     int k = index + 5; 
     for(int i = 0; i < 8; i++) {
@@ -111,31 +138,31 @@ int** print_packet(unsigned char* buf,int index){
             int high_byte = buf[k+1];
             unsigned char low_byte = buf[k];
             int temperature_reading = (high_byte << 8) | low_byte;
-            IR_array_data[i][j] = temperature_reading;
+            //IR_array_data[i][j] = temperature_reading;
+            frame[i][j] = min(max( temperature_reading / 4 , 0),40);
+             
             k+=2;
         }
     }   
     
     //
-    int** frame = new int*[8];
-    for (int i=0;i<8;i++)
-        frame[i] = new int[8];
     
-    for(int i = 0; i < 8; i++){     
-        if(PRINT_FRAME)
-			printf("%ld %d %d ",epoch, frameNumber,thermistor_data/16);
-        for(int j = 0; j < 8; j++){
-			if(PRINT_FRAME)
-				printf("%d ", IR_array_data[i][j]/4); //by looking at the datasheet, the LSB stands for .25 degree C.
-			frame[i][j] = IR_array_data[i][j]/4;
-		}
-        if(PRINT_FRAME)
-			printf("\n");
-    }
+    
+    //for(int i = 0; i < 8; i++){     
+    //    if(PRINT_FRAME)
+	//		printf("%ld %d %d ",epoch, frameNumber,thermistor_data/16);
+    //    for(int j = 0; j < 8; j++){
+	//		if(PRINT_FRAME)
+	//			printf("%d ", IR_array_data[i][j]/4); //by looking at the datasheet, the LSB stands for .25 degree C.
+	//		frame[i][j] = IR_array_data[i][j]/4;
+	//	}
+    //    if(PRINT_FRAME)
+	//		printf("\n");
+   // }
     
    
     //
-    fflush(stdout);
+   // fflush(stdout);
     return frame;
 }
 
@@ -144,6 +171,7 @@ map<int,int**> interpret_data(unsigned char *buf, int len){
 	int** frame;
 	map<int,int**> frames;
 	int index = find_packet_head(buf,0,len);
+	//cout << "1 " << index << endl;
 	if(index != 0){
         add_to_residue(buf,index);
         frame = print_packet(residue,0);
@@ -165,6 +193,7 @@ map<int,int**> interpret_data(unsigned char *buf, int len){
         frames[frameNumber] = frame;
         index+= PacketLength;
         index = find_packet_head(buf,index,len);
+        //cout << "2 " << index << endl; 
     }
     return frames;	
 }
@@ -210,22 +239,32 @@ Mat resize_frame(Mat im, int frameN){
 }
 
 void show_image(Mat im){
+   frameN ++;
    if(!showImage)
    	   return;
    Mat im_color;
+   Mat display;
    double min,max;
    minMaxIdx(im,&min,&max);
    Mat scaled_image;
-  
+   Point textOrg(110,25);
+   int fontFace = CV_FONT_HERSHEY_TRIPLEX;
+   double fontScale = 1;
+   int thickness = 1; 
    if(scaleImage){
    	    convertScaleAbs(im,scaled_image,255 / max);
    	    applyColorMap(scaled_image,im_color,COLORMAP_JET);
-   	    imshow("key points- scaled",im_color);
+   	    flip(im_color,display,0);
+   	    putText(display, to_string(frameN), textOrg, fontFace,fontScale,Scalar::all(40),thickness,8  );
+   	    namedWindow("key points- scaled",CV_WINDOW_AUTOSIZE);
+   	    imshow("key points- scaled",display);
    }else{
         applyColorMap(im,im_color,COLORMAP_JET);
+		namedWindow("key points - raw image",CV_WINDOW_AUTOSIZE);
    	    imshow("key points - raw image",im_color);
    }
-   waitKey(100);
+   waitKey(1);
+   
 }
 
 void blob_detect(Mat im){
@@ -307,8 +346,8 @@ void find_body(Rect candidate_rect, map<int,vector<Rect>> contour_map, int thres
   return;
 }
 
-map<int,float> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector<Rect> bodies){
-  map<int,float> body_confidence;
+map<int,Body> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector<Rect> bodies){
+  map<int,Body> body_confidence;
   for(map<int,map<int,vector<Rect>>>::iterator it = body_parts.begin();it != body_parts.end();it++){
     int body_location = it->first;
     Rect body ;
@@ -331,14 +370,19 @@ map<int,float> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector
         float temp_conf = 1.0 / (float)max(1, 24 - temperature);
         float height_conf = (float)result.height / (float)extended_resolution;
         confidence += (temp_conf)*(coverage_conf + height_conf);
-        if(confidence > 0.6)
-          body_confidence[body_location] = confidence;
+        if(confidence > 0.6){
+			Body body_ ;
+			body_.rect_ = body;
+			body_.T = temperature;
+			body_.confidence = confidence;
+          body_confidence[body_location] = body_;
+		}
     }
   }
   return body_confidence;
 }
 
-map<int,float> find_matching_contours(map<int,vector<Rect>> contour_map , vector<Rect> bodies){
+map<int, Body> find_matching_contours(map<int,vector<Rect>> contour_map , vector<Rect> bodies){
   map<int,map<int,vector<Rect>>> body_parts ;
   for (map<int,vector<Rect>>:: iterator it = contour_map.begin();it != contour_map.end();it++){
     for(Rect rect : it->second){
@@ -351,7 +395,7 @@ map<int,float> find_matching_contours(map<int,vector<Rect>> contour_map , vector
       }
     }
   }
-  map<int,float> body_confidence = calc_confidence(body_parts,bodies);
+  map<int,Body> body_confidence = calc_confidence(body_parts,bodies);
   //cout << "body confidence size " << body_confidence.size() << endl;
   return body_confidence;
 }
@@ -369,9 +413,9 @@ void contour_detector(Mat im, int frameN){
   vector<Vec4i> hierarchy;
   for (double thresh = min;thresh <= max;thresh++){
       Mat thresh_result;
-      //cout << "before "  << im.data(0,0)<endl;
+      
       threshold(im,thresh_result,thresh,maxValue,THRESH_BINARY);
-      //cout << "after "  << im.at<uchar>(0,0)<<endl;
+      
       findContours( thresh_result, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
       /// Approximate contours to polygons + get bounding rects and circles
       vector<vector<Point> > contours_poly( contours.size() );
@@ -413,7 +457,7 @@ void contour_detector(Mat im, int frameN){
     for (map<int,vector<Rect>>::iterator it = body_map.begin();it !=body_map.end(); it++){
         bodies.insert(bodies.end(),it->second.begin(),it->second.end());
     }
-    map<int,float> body_confidence = find_matching_contours(contour_map,bodies);
+    map<int,Body> body_confidence = find_matching_contours(contour_map,bodies);
     if(body_confidence.size()>0){
     	for( int i = 0; i< bodies.size(); i++ ){
       		Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
@@ -500,13 +544,15 @@ int main(int argc, char **argv){
     signal(SIGINT, sigintHandler);
     printf("epoch frameN Ta 1 2 3 4 5 6 7 8 9\n");
     map<int,int**> frames;
+    print_time();
+    
     while (!exitRequested)
     {
     	unsigned char buf2[1];
     	buf2[0] = '*';
     	f = ftdi_write_data(ftdi, buf2, 1); //Ask PIC24F04KA200 microcontroller to start sending data
         memset(buf, 0, sizeof buf);
-        //usleep(1 * 10000);
+        //usleep(1 * 500);
         f = ftdi_read_data(ftdi, buf, sizeof(buf));
         if (f<0){
             fprintf(stderr, "Something is wrong. %d bytes read\n",f);
@@ -517,8 +563,8 @@ int main(int argc, char **argv){
 			
             fprintf(stderr, "read %d bytes\n", f);
             frames = interpret_data(buf, f);
-            fprintf(stdout, "\n");
-            cout << "frames size " << frames.size() << endl;
+            //fprintf(stdout, "\n");
+            //cout << "frames size " << frames.size() << endl;
             for(map<int,int**>::iterator it=frames.begin();it!=frames.end();it++){
 				Mat im = convert_to_Mat(it->second);
 				Mat extended_im = resize_frame(im,it->first);
@@ -527,10 +573,13 @@ int main(int argc, char **argv){
 				if(contourDetection)
 					contour_detector(extended_im,it->first);
             }
+            frames.clear();
+            
             fflush(stderr);
             fflush(stdout);
         }
     }
+    
     signal(SIGINT, SIG_DFL);
     retval =  EXIT_SUCCESS;
     ftdi_usb_close(ftdi);
