@@ -28,5 +28,5 @@
 #define INTEREST_THRESH 1
 #define START_FRAME 100
 #define END_FRAME 200
-#define LIVE true
+#define LIVE false
 #define PRINT_FRAME false

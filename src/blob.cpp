@@ -29,34 +29,164 @@ static int lastFrame = 0;
 static int frameRate = 0;
 static int frameN = 0;
 
-enum status {UNKNOWN, EMTERED,  LEFT};
-enum direction {UNKNOWNDIR, LtR , RtL};
-struct Person {
-	map<int,Body> trajectory;
-	status status_;
-	direction direction_;
-};
+enum status {UNKNOWN, ENTERED,  LEFT};
+enum direction {UNKNOWNDIR, LtoR , RtoL};
+
 struct Body {
 	Rect rect_;
 	int T ;
 	float confidence;
 };
+struct bodyCompare {
+	bool operator() (const Body& lhs, const Body& rhs) const
+	{
+		return lhs.T < rhs.T;
+	}
+	
+};
+struct Person {
+	map<int,Body> trajectory;
+	status status_;
+	direction direction_;
+	int ID_;
+	int last_location;
+};
+
 float calc_match_weight (Person person_ , Body body){
 	map<int,Body>::reverse_iterator last_location = person_.trajectory.rbegin();
-	double distance =  norm(last_location.rect_.tl(),body.rect_.tl())
-	float size = abs(last_location.rect_.area() - body.rect_.area()) / last_location.rect_.area(); 
-	float T = abs(las_location.T - body.T) / last_location.T;
+	double distance =  norm(last_location->second.rect_.tl()-body.rect_.tl());
+	float size = abs(last_location->second.rect_.area() - body.rect_.area()) / last_location->second.rect_.area(); 
+	float T = abs(last_location->second.T - body.T) / last_location->second.T;
 	return (distance + size + T)  / 3.0;
+	return 0;
 }
-void update_people_info(map<int,Body> body_confidence , vector<person> people){
-	float match_weight ;
-	map<float , vector<>>
-	for(Person person_ :people){
-		for(map<int,Body>::iterator it = body_confidence.begin();it != body_confidence.end();it++){
-			match_weight = calc_match_weight(person_,it->second);
-			
-		}	
+void update_people_status(vector<Person>& people, int frameN){
+	cout << "updateing statu  of " << people.size() << endl;
+	for(Person& person:people){
+		map<int,Body>::iterator it = person.trajectory.end();
+		int last_seen_frame = it->first;
+		Body last_seen_body = it->second ;
+		if(person.status_ == UNKNOWN){
+			cout << "status is unknown " << endl;
+			person.status_ = ENTERED;
+		}
+		else if (person.status_ == ENTERED){
+			cout << "person already enreted and last frame seen is "<<last_seen_frame<< endl;
+			if(frameN - last_seen_frame > 10){
+				person.status_ = LEFT;
+				if(person.direction_ == LtoR){
+					cout << "one move from Left to Right" << endl;;
+					char q;
+					cin >> q;
+				}
+				else if(person.direction_ == RtoL){
+					cout << "one move from Right to Left " << endl;
+					char q;
+					cin >> q;
+				}else{
+					cout << "unknown direction  " << endl;
+					char  q;
+					cin >> q;
+				}
+				
+			}
+			else{
+				if (last_seen_body.rect_.x < person.last_location and (person.direction_ == RtoL or person.direction_ == UNKNOWNDIR) ){
+					person.direction_ = RtoL;
+					
+				}
+				else if(last_seen_body.rect_.x < person.last_location and (person.direction_ == LtoR or person.direction_ == UNKNOWNDIR)){
+					person.direction_ = LtoR;
+					
+				}else{
+					person.direction_ = UNKNOWNDIR;
+				}
+				person.last_location = last_seen_body.rect_.x;
+				cout << "last location is " << person.last_location << endl;
+			}	
+		}
 	}
+	for(Person per:people)
+		cout << "updated status is " << per.status_ << endl;
+}
+void update_people_info(map<int,Body> body_confidence , vector<Person>& people , int frameN){
+	cout << "at the very first numbe of people is " << people.size() << endl;
+	float match_weight ;
+	map<float , Person> weight_values;
+	map<Body,map<float,Person>,bodyCompare> pairs;
+	float max_weight = 0;
+	map<float,Body> weights_list ;
+	int ID = 0;
+	for(Person& perr:people){
+		perr.ID_ = ID;
+		cout << "current status is " << perr.status_<< endl;
+		ID++;
+	}
+	cout << "Frame Number is "<< frameN << endl;
+	cout << "number of bodies " << body_confidence.size() << endl;
+	for(map<int,Body>::iterator it = body_confidence.begin();it != body_confidence.end();it++){
+		max_weight = 0;
+		for(Person& person_ :people){
+			map<int,Body>::iterator peopleIT = person_.trajectory.end();
+			if(person_.status_ == LEFT)
+				continue;
+			match_weight = calc_match_weight(person_,it->second);
+			max_weight = max(match_weight,max_weight);
+			weight_values[match_weight] = person_;
+			cout << "match weight is " << match_weight << endl;
+		}
+		pairs[it->second] = weight_values;
+		weights_list[max_weight] = it->second;
+		weight_values.clear();
+	}
+	cout << "number of matched pairs "<< weights_list.size() << endl;
+	vector<Person> updated_people;
+	vector<Person>::iterator peopleIT;
+	for(map<float,Body>::reverse_iterator bodyIT = weights_list.rbegin();bodyIT != weights_list.rend();bodyIT++){
+		float current_max = bodyIT -> first;
+		
+		map<Body,map<float,Person>>::iterator current_bodyIT = pairs.find(bodyIT->second);
+		map<float,Person> values = current_bodyIT->second;
+		Body current_body = current_bodyIT->first;
+		bool found = false;
+		bool pushed = false;
+		cout << "size of values is " << values.size()<< endl;
+		for(map<float,Person>::reverse_iterator itt = values.rbegin();itt != values.rend();itt++){
+			for(Person per:updated_people){
+				if(per.ID_ == itt->second.ID_){
+					found = true;
+					break;
+				}
+			}
+			if(!found){
+				itt->second.trajectory[frameN] = current_body;
+				updated_people.push_back(itt->second);
+				pushed = true;
+				cout << "pushing person " << itt->second.ID_;
+				break;
+  			}
+		}
+		if(!pushed){
+			
+			Person new_one ;
+			new_one.trajectory[frameN]= current_body;
+			new_one.status_ = UNKNOWN;
+			new_one.direction_ = UNKNOWNDIR;
+			new_one.ID_ = ID;
+			cout << "pushing body "<<ID << "at frame "<<frameN<<endl;
+			updated_people.push_back(new_one);
+		}
+		
+	}
+	
+	people.clear();
+	people.insert(people.end(),updated_people.begin(),updated_people.end());
+	cout << "at the end people size is "<<people.size()<<endl;
+	updated_people.clear();
+	char dummy;
+	//cin >> dummy;
+	//if(dummy == 'q')
+	//	exit(0);
 }
 
 //prints system time 
@@ -400,7 +530,7 @@ map<int, Body> find_matching_contours(map<int,vector<Rect>> contour_map , vector
   return body_confidence;
 }
 
-void contour_detector(Mat im, int frameN){
+void contour_detector(Mat im, int frameN,vector<Person>& people){
   map<int,vector<Rect>> contour_map;
   Mat org_im;
   org_im = im.clone();
@@ -463,8 +593,12 @@ void contour_detector(Mat im, int frameN){
       		Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
       		//drawContours( drawing, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
       		rectangle( org_im, bodies[i].tl(), bodies[i].br(), 25, 2, 8, 0 );
-    	}	
+    	}
+    	update_people_info(body_confidence , people ,frameN);
+    	cout << "people size " << people.size() << endl;
+    	
     }
+    update_people_status(people,frameN);
    	show_image(org_im);
   }
 }
@@ -474,6 +608,7 @@ void read_from_file(string file_name){
     int** frame = NULL;
     int frameN = 0;
     char quite = 'n';
+    vector<Person> people;
     while(true){
 		frameN++;
 		//cout << "processing frame " << frameN << endl;
@@ -489,7 +624,7 @@ void read_from_file(string file_name){
        if(blobDetection)
        		blob_detect(extended_im);
        if(contourDetection)
-       		contour_detector(extended_im,frameN);
+       		contour_detector(extended_im,frameN,people);
        
        //cin >> quite;
        if (quite == 'y')
@@ -545,7 +680,7 @@ int main(int argc, char **argv){
     printf("epoch frameN Ta 1 2 3 4 5 6 7 8 9\n");
     map<int,int**> frames;
     print_time();
-    
+    vector<Person> people;
     while (!exitRequested)
     {
     	unsigned char buf2[1];
@@ -571,7 +706,7 @@ int main(int argc, char **argv){
 				if(blobDetection)
 					blob_detect(extended_im);
 				if(contourDetection)
-					contour_detector(extended_im,it->first);
+					contour_detector(extended_im,it->first,people);
             }
             frames.clear();
             
