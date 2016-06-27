@@ -1,5 +1,5 @@
 #define extended_resolution 256
-#define input_file_name "../8.txt"
+#define input_file_name "../data/81.txt"
 #define blobDetection false
 #define contourDetection true  // add comments to eveything and sperate in sections
 #define colorMap true
@@ -27,6 +27,7 @@
 #define RECTMINAREA 5
 #define INTEREST_THRESH 1
 #define START_FRAME 100
-#define END_FRAME 200
+#define END_FRAME 600
 #define LIVE false
 #define PRINT_FRAME false
+#define WAIT_TIME 100

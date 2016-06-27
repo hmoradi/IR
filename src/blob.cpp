@@ -16,22 +16,21 @@
 
 using namespace cv;
 using namespace std;
+char temp;
+#define pause() (cin >> temp)
 
 #define PacketLength 134
 struct ftdi_context *ftdi;
-int IR_array_data[8][8];
 unsigned char residue[1024] ;
 static int exitRequested = 0;
 static int frameNumber = 0;
-static long int lastTime =0;
-static int lastFrame = 0;
-static int frameRate = 0;
 static int frameN = 0;
 
 enum status {UNKNOWN, ENTERED,  LEFT};
 enum direction {UNKNOWNDIR, LtoR , RtoL};
 
 struct Body {
+	int ID_;
 	Rect rect_;
 	int T ;
 	float confidence;
@@ -49,6 +48,9 @@ struct Person {
 	direction direction_;
 	int ID_;
 	int last_location;
+	int last_frame_seen;
+	Body last_body_seen;
+	int trajectory_size;
 };
 
 float calc_match_weight (Person person_ , Body body){
@@ -59,135 +61,171 @@ float calc_match_weight (Person person_ , Body body){
 	return (distance + size + T)  / 3.0;
 	return 0;
 }
+float avg_(int start, int end, vector<int> input_){
+	//cout << "averageing vector with size "<< input_.size() << "starting from " << start << "ending at" << end << endl;
+	float sum = 0;
+	int count = 0;
+	for(int i=start;i<end;i++){
+		sum+= input_.at(i);
+		count += 1;
+	}
+	return sum / max(count , 1);
+}
 void update_people_status(vector<Person>& people, int frameN){
-	cout << "updateing status  of " << people.size() << endl;
-	for(Person& person:people){
-		map<int,Body>::iterator it = person.trajectory.end();
-		int last_seen_frame = it->first;
-		Body last_seen_body = it->second ;
-		if(person.status_ == UNKNOWN){
-			cout << "status is unknown " << endl;
-			person.status_ = ENTERED;
+	for(Person& person_:people){
+		if(person_.status_ == LEFT)
+			continue;
+		if(person_.status_ == UNKNOWN){
+			//cout << "status is unknown " << endl;
+			person_.status_ = ENTERED;
 		}
-		else if (person.status_ == ENTERED){
-			cout << "person already enreted and last frame seen is "<< last_seen_frame << endl;
-			if(frameN - last_seen_frame > 10){
-				person.status_ = LEFT;
-				if(person.direction_ == LtoR){
-					cout << "one move from Left to Right" << endl;;
-					char q;
-					cin >> q;
+		else if (person_.status_ == ENTERED){
+			
+			if(frameN - person_.last_frame_seen > 5){ //Old Person
+				person_.status_= LEFT;
+				vector<int> locations ;
+				vector<int> sorted_locations;
+			
+				float frame_confidence = 0;
+				int min_x = extended_resolution;
+				int min_t = 0;
+				int max_x = 0;
+				int max_t = 0;
+				for(auto item :person_.trajectory){
+					locations.push_back(item.second.rect_.x);
+					sorted_locations.push_back(item.second.rect_.x);
+				
+					frame_confidence += item.second.confidence;
+				
+					min_t = min(min_t,item.first);
+					max_t = max(max_t,item.first);
 				}
-				else if(person.direction_ == RtoL){
-					cout << "one move from Right to Left " << endl;
-					char q;
-					cin >> q;
-				}else{
-					cout << "unknown direction  " << endl;
-					char  q;
-					cin >> q;
+				person_.last_frame_seen = max_t;
+				person_.last_body_seen = person_.trajectory[max_t];
+
+				sort(sorted_locations.begin(),sorted_locations.end());
+				max_x = sorted_locations.at(sorted_locations.size()-1);
+				min_x = sorted_locations.at(0);
+				float speed = (float)(max_x - min_x)/(float)(max(max_t-min_t,1));
+				float avg_confidence = frame_confidence /(float)locations.size();
+				
+				if(locations.size() > 5){
+					float first_half_average = avg_(0, locations.size()/2,locations);    
+					float second_half_average = avg_(((locations.size()/2) + 1) , locations.size(),locations);
+					if(first_half_average < second_half_average)
+						cout << "&&&&&&&&&&&&&&&&&&&&left to right" << endl;
+					else
+						cout << "$$$$$$$$$$$$$$$$$$$right to left " << endl;
+					cout << "person temperature is " << person_.last_body_seen.T << endl;
+					pause();
+				}else if(speed > 10 and speed < 120){
+
+				}else if(avg_confidence > 2){
+
 				}
 				
+		}	
+		else{
+			if (person_.last_body_seen.rect_.x < person_.last_location and (person_.direction_ == RtoL or person_.direction_ == UNKNOWNDIR) ){
+				person_.direction_ = RtoL;
 			}
-			else{
-				if (last_seen_body.rect_.x < person.last_location and (person.direction_ == RtoL or person.direction_ == UNKNOWNDIR) ){
-					person.direction_ = RtoL;
-					
-				}
-				else if(last_seen_body.rect_.x < person.last_location and (person.direction_ == LtoR or person.direction_ == UNKNOWNDIR)){
-					person.direction_ = LtoR;
-					
-				}else{
-					person.direction_ = UNKNOWNDIR;
-				}
-				person.last_location = last_seen_body.rect_.x;
-				cout << "last location is " << person.last_location << endl;
-			}	
-		}
+			else if(person_.last_body_seen.rect_.x < person_.last_location and (person_.direction_ == LtoR or person_.direction_ == UNKNOWNDIR)){
+				person_.direction_ = LtoR;
+			}else{
+				//person_.direction_ = UNKNOWNDIR;
+			}
+			person_.last_location = person_.last_body_seen.rect_.x;
+		}	
 	}
-	for(Person per:people)
-		cout << "updated status is " << per.status_ << endl;
 }
-void update_people_info(map<int,Body> body_confidence , vector<Person>& people , int frameN){
-	
-	float match_weight ;
-	float max_weight = 0;
-	
-	map<float , Person> weight_values;
-	map<Body,map<float,Person>,bodyCompare> pairs;
-	map<float,Body> weights_list ;
-	
-	
-	int ID = 0;
-	for(Person& perr:people){
-		perr.ID_ = ID;
-		ID++;
+void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, int frameN){
+	int num_of_bodies = 0;
+	int body_ID = 0;
+	int person_ID = 0;
+	vector<Body> bodies ;
+	vector<Person> persons;
+	for(auto body_item : body_confidence){
+		num_of_bodies ++;
+		body_item.second.ID_ = body_ID;
+		body_ID++;
+		//cout << "body confidence is " << body_item.second.confidence << endl;
+		bodies.push_back(body_item.second);
 	}
+	int num_of_persons = people.size();
+	for(Person& person:people){
+		person.ID_ = person_ID;
+		persons.push_back(person);
+		person_ID++;
+	}
+	people.clear();
+	float** pairs_matrix = new float*[num_of_bodies];
+	for(int i=0;i < num_of_bodies;i++)
+		pairs_matrix[i] = new float[num_of_persons];
 	
-	cout << "Frame Number is "<< frameN << endl;
-	cout << "number of bodies " << body_confidence.size() << endl;
-	for(map<int,Body>::iterator it = body_confidence.begin();it != body_confidence.end();it++){
-		max_weight = 0;
-		for(Person& person_ :people){
+	float match_weight = 0;
+	for(Body& body_:bodies){
+		for(Person& person_ :persons){
+			match_weight = 0;
 			map<int,Body>::iterator peopleIT = person_.trajectory.end();
-			if(person_.status_ == LEFT)
-				continue;
-			match_weight = calc_match_weight(person_,it->second);
-			max_weight = max(match_weight,max_weight);
-			weight_values[match_weight] = person_;
-			cout << "match weight is " << match_weight << endl;
+			if(person_.status_ != LEFT and (frameN - person_.last_frame_seen < 10))
+				match_weight = calc_match_weight(person_,body_);
+			pairs_matrix[body_.ID_][person_.ID_] = match_weight;
 		}
-		pairs[it->second] = weight_values;
-		weights_list[max_weight] = it->second;
-		weight_values.clear();
 	}
-	cout << "number of matched pairs "<< weights_list.size() << endl;
-	vector<Person> updated_people;
-	vector<Person>::iterator peopleIT;
-	for(map<float,Body>::reverse_iterator bodyIT = weights_list.rbegin();bodyIT != weights_list.rend();bodyIT++){
-		float current_max = bodyIT -> first;
-		map<Body,map<float,Person>>::iterator current_bodyIT = pairs.find(bodyIT->second);
-		map<float,Person> values = current_bodyIT->second;
-		Body current_body = current_bodyIT->first;
-		bool found = false;
-		bool pushed = false;
-		cout << "size of values is " << values.size()<< endl;
-		for(map<float,Person>::reverse_iterator itt = values.rbegin();itt != values.rend();itt++){
-			for(Person per:updated_people){
-				if(per.ID_ == itt->second.ID_){
-					found = true;
-					break;
+	int num_of_matched_pairs = 0;
+	map<int,int> matched ;
+	while(true){
+		int max_row = -1;
+		int max_col = -1;
+		float max_value = 0;
+		for (int i=0;i<num_of_bodies;i++){
+			for(int j=0;j<num_of_persons;j++){
+				if(pairs_matrix[i][j] > max_value){
+					max_value = pairs_matrix[i][j];
+					max_row = i;
+					max_col = j;
 				}
 			}
-			if(!found){
-				itt->second.trajectory[frameN] = current_body;
-				updated_people.push_back(itt->second);
-				pushed = true;
-				cout << "pushing person " << itt->second.ID_ <<"at frame " <<frameN<< endl;
-				cout << "size of trajectory is "<<itt->second.trajectory.size() << endl;
-				break;
-  			}
 		}
-		if(!pushed){
-			
-			Person new_one ;
-			new_one.trajectory[frameN]= current_body;
-			new_one.status_ = UNKNOWN;
-			new_one.direction_ = UNKNOWNDIR;
-			new_one.ID_ = ID;
-			cout << "pushing body "<<ID << "at frame "<<frameN<<endl;
-			updated_people.push_back(new_one);
+		if(max_row != -1 and max_col != -1){
+			persons.at(max_col).trajectory[frameN] = bodies.at(max_row);
+			people.push_back(persons.at(max_col));
+			//cout <<"person "<<max_col << " is matched with body "<<max_row << endl;
+			matched[max_row] = max_col;
+			for(int k=0;k<num_of_persons;k++)
+				pairs_matrix[max_row][k] = -1;
+			for(int k=0;k<num_of_bodies;k++)
+				pairs_matrix[k][max_col] = -1;
+			num_of_matched_pairs ++;	
+		}else{
+			//cout << "matching is done " << endl;
+			break;
 		}
 		
 	}
-	
-	people.clear();
-	people.insert(people.end(),updated_people.begin(),updated_people.end());
-	updated_people.clear();
-	char dummy;
-	//cin >> dummy;
-	//if(dummy == 'q')
-	//	exit(0);
+	for(Body& body_ : bodies){
+		if(matched.find(body_.ID_) == matched.end()){
+			Person new_one ;
+			new_one.trajectory[frameN]= body_;
+			new_one.status_ = UNKNOWN;
+			new_one.direction_ = UNKNOWNDIR;
+			new_one.ID_ = person_ID;
+			person_ID++;
+			//cout << "createing new person with id  "<<new_one.ID_ << " at frame "<<frameN<<endl;
+			people.push_back(new_one);
+		}
+	}
+	bool found = false;
+	for(Person& person_:persons){
+		for(auto item:matched){
+			if(item.second == person_.ID_)
+				found = true;
+		}
+		if(!found){
+			people.push_back(person_);
+			//cout << "could not match this person to any body "<< person_.ID_ << endl;
+		}
+	}
 }
 
 //prints system time 
@@ -199,7 +237,7 @@ void print_time(){
     // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
     ts = *localtime(&now);
     strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
-    cout << buf <<" " << frameN << endl;
+    //cout << buf <<" " << frameN << endl;
 }
 /*
  * sigintHandler --
@@ -394,7 +432,7 @@ void show_image(Mat im){
 		namedWindow("key points - raw image",CV_WINDOW_AUTOSIZE);
    	    imshow("key points - raw image",im_color);
    }
-   waitKey(1);
+   waitKey(WAIT_TIME);
    
 }
 
@@ -492,21 +530,21 @@ map<int,Body> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector<
     map<int,vector<Rect>> parts = it->second;
     for(map<int,vector<Rect>>::iterator inner_it = parts.begin();inner_it!= parts.end();inner_it++){
         Rect result;
-        int temperature = it->first;
+        int temperature = inner_it->first;
         for(Rect rect:inner_it->second){
           result |= rect;
         }
         Rect coverage = result & body;
-        float coverage_conf = (float)coverage.area() / (float)body.area();
-        float temp_conf = 1.0 / (float)max(1, 24 - temperature);
+        float coverage_conf = (float)coverage.area() / (float)(body| coverage).area();
+        float temp_conf = 1.0 / (float)max(1, 25 - temperature);
         float height_conf = (float)result.height / (float)extended_resolution;
         confidence += (temp_conf)*(coverage_conf + height_conf);
-        if(confidence > 0.6){
+        if(confidence > 1.2){
 			Body body_ ;
 			body_.rect_ = body;
 			body_.T = temperature;
 			body_.confidence = confidence;
-          body_confidence[body_location] = body_;
+          	body_confidence[body_location] = body_;
 		}
     }
   }
@@ -595,9 +633,8 @@ void contour_detector(Mat im, int frameN,vector<Person>& people){
       		//drawContours( drawing, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
       		rectangle( org_im, bodies[i].tl(), bodies[i].br(), 25, 2, 8, 0 );
     	}
-    	update_people_info(body_confidence , people ,frameN);
-    	cout << "people size " << people.size() << endl;
-    	
+    	update_people_info2(body_confidence , people ,frameN);
+    	//pause();
     }
     update_people_status(people,frameN);
    	show_image(org_im);
@@ -605,7 +642,7 @@ void contour_detector(Mat im, int frameN,vector<Person>& people){
 }
 
 void read_from_file(string file_name){
-    std::ifstream infile(input_file_name);
+    std::ifstream infile(file_name);
     int** frame = NULL;
     int frameN = 0;
     char quite = 'n';
@@ -614,8 +651,10 @@ void read_from_file(string file_name){
 		frameN++;
 		//cout << "processing frame " << frameN << endl;
        frame = read_frame(&infile);
-       if (frame == NULL)
+       if (frame == NULL){
+            cout << "Something is wrong with input file " << input_file_name << endl;
             return;	
+       }
        if (frameN < START_FRAME)
        		continue; 
        else if (frameN > END_FRAME)
@@ -626,17 +665,13 @@ void read_from_file(string file_name){
        		blob_detect(extended_im);
        if(contourDetection)
        		contour_detector(extended_im,frameN,people);
-       
-       //cin >> quite;
-       if (quite == 'y')
-          return;
     }
 }
 
 int main(int argc, char **argv){
     if(LIVE == false){
 		cout << "reading from file" << endl;
-		read_from_file("../8.txt");
+		read_from_file(input_file_name);
 		return 0;
 	}
     unsigned char buf[1024];
