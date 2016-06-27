@@ -1,4 +1,3 @@
-/////////////////
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -61,7 +60,7 @@ float calc_match_weight (Person person_ , Body body){
 	return 0;
 }
 void update_people_status(vector<Person>& people, int frameN){
-	cout << "updateing statu  of " << people.size() << endl;
+	cout << "updateing status  of " << people.size() << endl;
 	for(Person& person:people){
 		map<int,Body>::iterator it = person.trajectory.end();
 		int last_seen_frame = it->first;
@@ -71,7 +70,7 @@ void update_people_status(vector<Person>& people, int frameN){
 			person.status_ = ENTERED;
 		}
 		else if (person.status_ == ENTERED){
-			cout << "person already enreted and last frame seen is "<<last_seen_frame<< endl;
+			cout << "person already enreted and last frame seen is "<< last_seen_frame << endl;
 			if(frameN - last_seen_frame > 10){
 				person.status_ = LEFT;
 				if(person.direction_ == LtoR){
@@ -110,18 +109,21 @@ void update_people_status(vector<Person>& people, int frameN){
 		cout << "updated status is " << per.status_ << endl;
 }
 void update_people_info(map<int,Body> body_confidence , vector<Person>& people , int frameN){
-	cout << "at the very first numbe of people is " << people.size() << endl;
+	
 	float match_weight ;
+	float max_weight = 0;
+	
 	map<float , Person> weight_values;
 	map<Body,map<float,Person>,bodyCompare> pairs;
-	float max_weight = 0;
 	map<float,Body> weights_list ;
+	
+	
 	int ID = 0;
 	for(Person& perr:people){
 		perr.ID_ = ID;
-		cout << "current status is " << perr.status_<< endl;
 		ID++;
 	}
+	
 	cout << "Frame Number is "<< frameN << endl;
 	cout << "number of bodies " << body_confidence.size() << endl;
 	for(map<int,Body>::iterator it = body_confidence.begin();it != body_confidence.end();it++){
@@ -144,7 +146,6 @@ void update_people_info(map<int,Body> body_confidence , vector<Person>& people ,
 	vector<Person>::iterator peopleIT;
 	for(map<float,Body>::reverse_iterator bodyIT = weights_list.rbegin();bodyIT != weights_list.rend();bodyIT++){
 		float current_max = bodyIT -> first;
-		
 		map<Body,map<float,Person>>::iterator current_bodyIT = pairs.find(bodyIT->second);
 		map<float,Person> values = current_bodyIT->second;
 		Body current_body = current_bodyIT->first;
@@ -162,7 +163,8 @@ void update_people_info(map<int,Body> body_confidence , vector<Person>& people ,
 				itt->second.trajectory[frameN] = current_body;
 				updated_people.push_back(itt->second);
 				pushed = true;
-				cout << "pushing person " << itt->second.ID_;
+				cout << "pushing person " << itt->second.ID_ <<"at frame " <<frameN<< endl;
+				cout << "size of trajectory is "<<itt->second.trajectory.size() << endl;
 				break;
   			}
 		}
@@ -181,7 +183,6 @@ void update_people_info(map<int,Body> body_confidence , vector<Person>& people ,
 	
 	people.clear();
 	people.insert(people.end(),updated_people.begin(),updated_people.end());
-	cout << "at the end people size is "<<people.size()<<endl;
 	updated_people.clear();
 	char dummy;
 	//cin >> dummy;
