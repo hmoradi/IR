@@ -77,7 +77,7 @@ void update_people_status(vector<Person>& people, int frameN){
 			left_person++;
 			continue;
 		}
-		cout << "updateding status for " << people.size() - left_person<< "people" << endl;
+		//cout << "updateding status for " << people.size() - left_person<< "people" << endl;
 		if(person_.status_ == UNKNOWN){
 			person_.status_ = ENTERED;
 		}
@@ -108,6 +108,7 @@ void update_people_status(vector<Person>& people, int frameN){
 				float speed = (float)(max_x - min_x)/(float)(max(max_t-min_t,1));
 				float avg_confidence = frame_confidence /(float)locations.size();
 				if(locations.size() >= 2 and speed != 0){
+					cout << "avg confidence is " << avg_confidence <<" locatoin size "<<locations.size() << " spped "<< speed << endl;
 					float first_half_average = avg_(0, locations.size()/2,locations);    
 					float second_half_average = avg_(((locations.size()/2)) , locations.size(),locations);
 					if(first_half_average < second_half_average){
@@ -569,7 +570,7 @@ map<int,Body> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector<
         float height_conf = (float)result.height / (float)extended_resolution;
         float width_conf = (float)result.width / (float)extended_resolution;
         float size_conf = (float)(body.area()) / (float)(extended_resolution*extended_resolution);
-        confidence += (float)(2*temp_conf + coverage_conf + height_conf+size_conf- width_conf)/5.0 ;
+        confidence += (float)(5*temp_conf + coverage_conf + height_conf+size_conf- width_conf)/8.0 ;
     }
     //cout << "new confidence is "  << confidence << endl;
     if(confidence >= 1.0){
@@ -794,7 +795,7 @@ int main(int argc, char **argv){
         else if( f > 130 )
         {
 			
-            fprintf(stderr, "read %d bytes\n", f);
+            //fprintf(stderr, "read %d bytes\n", f);
             frames = interpret_data(buf, f);
             //fprintf(stdout, "\n");
             //cout << "frames size " << frames.size() << endl;
