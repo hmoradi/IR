@@ -25,7 +25,7 @@ unsigned char residue[1024] ;
 static int exitRequested = 0;
 static int frameNumber = 0;
 static int frameN = 0;
-
+static int people_inside = 0;
 enum status {UNKNOWN, ENTERED,  LEFT};
 enum direction {UNKNOWNDIR, LtoR , RtoL};
 
@@ -79,7 +79,6 @@ void update_people_status(vector<Person>& people, int frameN){
 		}
 		cout << "updateding status for " << people.size() - left_person<< "people" << endl;
 		if(person_.status_ == UNKNOWN){
-			//cout << "status is unknown " << endl;
 			person_.status_ = ENTERED;
 		}
 		else if (person_.status_ == ENTERED){
@@ -95,8 +94,6 @@ void update_people_status(vector<Person>& people, int frameN){
 				int max_t = 0;
 				for(auto item :person_.trajectory){
 					locations.push_back(item.second.rect_.x+ (item.second.rect_.width / 2));
-					//cout << "location is " << item.second.rect_.x + (item.second.rect_.width / 2) <<endl;;
-					//cout << "location area is "<<item.second.rect_.area() << endl;
 					sorted_locations.push_back(item.second.rect_.x+ (item.second.rect_.width / 2));
 				
 					frame_confidence += item.second.confidence;
@@ -105,27 +102,30 @@ void update_people_status(vector<Person>& people, int frameN){
 					max_t = max(max_t,item.first);
 					//cout << "person id " <<person_.ID_ << " trajectory frame "<< item.first << endl;
 				}
-				//person_.last_frame_seen = max_t;
-				//person_.last_body_seen = person_.trajectory[max_t];
-
 				sort(sorted_locations.begin(),sorted_locations.end());
 				max_x = sorted_locations.at(sorted_locations.size()-1);
 				min_x = sorted_locations.at(0);
 				float speed = (float)(max_x - min_x)/(float)(max(max_t-min_t,1));
 				float avg_confidence = frame_confidence /(float)locations.size();
-				//cout << "location size is " << locations.size() << endl;
-				//cout << "speed is  " << speed << endl;
-				//cout << "avg confidence " << avg_confidence << endl;
 				if(locations.size() >= 2 and speed != 0){
 					float first_half_average = avg_(0, locations.size()/2,locations);    
 					float second_half_average = avg_(((locations.size()/2)) , locations.size(),locations);
-					//cout << "first half " << first_half_average << " second half " << second_half_average <<endl;
-					if(first_half_average < second_half_average)
+					if(first_half_average < second_half_average){
 						cout << "&&&&&&&&&&&&&&&&&&&&left to right" << endl;
-					else
+						if(OPOSITE_DIRECTION)
+							people_inside ++;
+						else
+							people_inside --;
+					}
+					else{
 						cout << "$$$$$$$$$$$$$$$$$$$right to left " << endl;
+						if(OPOSITE_DIRECTION)
+							people_inside --;
+						else
+							people_inside ++;
+					}
 					cout << "person temperature is " << person_.last_body_seen.T << endl;
-					pause();
+					//pause();
 				}else if(speed > 10 and speed < 120){
 					if(person_.direction_ == LtoR)
 						cout << "speed move from left to right"<< endl;
@@ -454,7 +454,7 @@ void show_image(Mat im){
    	    convertScaleAbs(im,scaled_image,255 / max);
    	    applyColorMap(scaled_image,im_color,COLORMAP_JET);
    	    flip(im_color,display,0);
-   	    putText(display, to_string(frameN), textOrg, fontFace,fontScale,Scalar::all(40),thickness,8  );
+   	    putText(display, to_string(people_inside), textOrg, fontFace,fontScale,Scalar::all(40),thickness,8  );
    	    namedWindow("key points- scaled",CV_WINDOW_AUTOSIZE);
    	    imshow("key points- scaled",display);
    }else{
@@ -620,6 +620,8 @@ void contour_detector(Mat im, int frameN,vector<Person>& people){
 	double maxValue = 100 ;
 	double min,max;
   minMaxIdx(im,&min,&max);
+  if (max - min <4)
+	return;
   vector<vector<Point>> contours;
   vector<Vec4i> hierarchy;
   for (double thresh = min;thresh <= max;thresh++){
@@ -777,6 +779,8 @@ int main(int argc, char **argv){
     vector<Person> people;
     while (!exitRequested)
     {
+    	if(frameN > 1000)
+			return 0;
     	unsigned char buf2[1];
     	buf2[0] = '*';
     	f = ftdi_write_data(ftdi, buf2, 1); //Ask PIC24F04KA200 microcontroller to start sending data

@@ -28,6 +28,7 @@
 #define INTEREST_THRESH 1
 #define START_FRAME 75
 #define END_FRAME 600
-#define LIVE false
+#define LIVE true
 #define PRINT_FRAME false
-#define WAIT_TIME 100
+#define WAIT_TIME 1
+#define OPOSITE_DIRECTION false

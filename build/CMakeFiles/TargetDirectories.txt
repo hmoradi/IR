@@ -1,3 +1,1 @@
-/home/hessam/Desktop/IR/IR/build/CMakeFiles/edit_cache.dir
-/home/hessam/Desktop/IR/IR/build/CMakeFiles/rebuild_cache.dir
-/home/hessam/Desktop/IR/IR/build/CMakeFiles/blob.dir
+/home/pi/Desktop/IR/build/CMakeFiles/blob.dir

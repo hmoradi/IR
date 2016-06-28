@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/hessam/Desktop/IR/IR/src/blob.cpp" "/home/hessam/Desktop/IR/IR/build/CMakeFiles/blob.dir/src/blob.cpp.o"
+  "/home/pi/Desktop/IR/src/blob.cpp" "/home/pi/Desktop/IR/build/CMakeFiles/blob.dir/src/blob.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

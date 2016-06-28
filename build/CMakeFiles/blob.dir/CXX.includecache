@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/hessam/Desktop/IR/IR/src/blob.cpp
+/home/pi/Desktop/IR/src/blob.cpp
 stdio.h
 -
 stdlib.h
@@ -18,7 +18,7 @@ getopt.h
 signal.h
 -
 ftdi.h
-/home/hessam/Desktop/IR/IR/src/ftdi.h
+/home/pi/Desktop/IR/src/ftdi.h
 time.h
 -
 string.h
@@ -34,9 +34,9 @@ string
 fstream
 -
 params.h
-/home/hessam/Desktop/IR/IR/src/params.h
+/home/pi/Desktop/IR/src/params.h
 
-/home/hessam/Desktop/IR/IR/src/ftdi.h
+/home/pi/Desktop/IR/src/ftdi.h
 stdint.h
 -
 sys/time.h
@@ -44,5 +44,5 @@ sys/time.h
 windows.h
 -
 
-/home/hessam/Desktop/IR/IR/src/params.h
+/home/pi/Desktop/IR/src/params.h
 
