@@ -1,5 +1,5 @@
 #define extended_resolution 256
-#define input_file_name "../data/81.txt"
+#define input_file_name "../data/24.txt"
 #define blobDetection false
 #define contourDetection true  // add comments to eveything and sperate in sections
 #define colorMap true
@@ -23,10 +23,10 @@
 #define blobMaxInertiaRatio 1
 #define blobFilterByColor false
 #define blobColor 255
-#define RECTMAXAREA 200000
-#define RECTMINAREA 5
+#define RECTMAXAREA 70
+#define RECTMINAREA 1
 #define INTEREST_THRESH 1
-#define START_FRAME 100
+#define START_FRAME 75
 #define END_FRAME 600
 #define LIVE false
 #define PRINT_FRAME false
