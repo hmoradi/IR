@@ -171,11 +171,14 @@ void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, i
 		//cout << "body confidence is " << body_item.second.confidence << endl;
 		bodies.push_back(body_item.second);
 	}
-	int num_of_persons = people.size();
+	int num_of_persons =0;
 	for(Person& person:people){
+		if(person.status_ == LEFT)
+			continue;
 		person.ID_ = person_ID;
 		persons.push_back(person);
 		person_ID++;
+		num_of_persons++;
 	}
 	people.clear();
 	float** pairs_matrix = new float*[num_of_bodies];
@@ -215,7 +218,6 @@ void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, i
 			persons.at(max_col).last_frame_seen = frameN;
 			persons.at(max_col).last_body_seen = bodies.at(max_row);
 			people.push_back(persons.at(max_col));
-			//cout <<"person "<<max_col << " is matched with body "<<max_row << endl;
 			matched[max_row] = max_col;
 			for(int k=0;k<num_of_persons;k++)
 				pairs_matrix[max_row][k] = -1;
@@ -223,7 +225,6 @@ void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, i
 				pairs_matrix[k][max_col] = -1;
 			num_of_matched_pairs ++;	
 		}else{
-			//cout << "matching is done " << endl;
 			break;
 		}
 		
@@ -236,24 +237,19 @@ void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, i
 			new_one.direction_ = UNKNOWNDIR;
 			new_one.ID_ = person_ID;
 			person_ID++;
-			//cout << "createing new person with id  "<<new_one.ID_ << " at frame "<<frameN<<endl;
 			people.push_back(new_one);
 		}
 	}
 	bool found = false;
-	//cout << "at frame "<< frameN << " num of matched pairs " << num_of_matched_pairs << endl;
 	for(Person& person_:persons){
 		found = false;
-		//cout << "persion id " << person_.ID_ << endl;
 		for(auto item:matched){
-			//cout << "matched body " <<item.first << "with person "<<item.second <<endl;
 			if(item.second == person_.ID_){
 				found = true;
 			}
 		}
 		if(!found){
 			people.push_back(person_);
-			//cout << "could not match this person to any body "<< person_.ID_ << "at frame "<< frameN << endl;
 		}
 	}
 }
@@ -611,60 +607,44 @@ bool match_to_body(Rect a, Rect b){
 		return true;
 	return false;
 }
-void contour_detector(Mat im, int frameN,vector<Person>& people){
-  map<int,vector<Rect>> contour_map;
-  Mat org_im;
-  org_im = im.clone();
-  RNG rng(12345);
-	//double thresh = 18;
+
+map<int,vector<Rect>> counter_map_extract(Mat im){
+	map<int,vector<Rect>> contour_map;
 	double maxValue = 100 ;
 	double min,max;
-  minMaxIdx(im,&min,&max);
-  if (max - min <4)
-	return;
-  vector<vector<Point>> contours;
-  vector<Vec4i> hierarchy;
-  for (double thresh = min;thresh <= max;thresh++){
-      Mat thresh_result;
-      
-      threshold(im,thresh_result,thresh,maxValue,THRESH_BINARY);
-      
-      findContours( thresh_result, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-      /// Approximate contours to polygons + get bounding rects and circles
-      vector<vector<Point> > contours_poly( contours.size() );
-      vector<Rect> boundRect( contours.size() );
-      //vector<Point2f>center( contours.size() );
-      //vector<float>radius( contours.size() );
-      for( int i = 0; i < contours.size(); i++ ){
-          approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
-          boundRect[i] = boundingRect( Mat(contours_poly[i]) );
-          //minEnclosingCircle( (Mat)contours_poly[i], center[i], radius[i] );
-      }
-      contour_map[thresh] = boundRect;
+	minMaxIdx(im,&min,&max);
+  	vector<vector<Point>> contours;
+  	vector<Vec4i> hierarchy;
+  	for (double thresh = min;thresh <= max;thresh++){
+  		Mat thresh_result;
+  		threshold(im,thresh_result,thresh,maxValue,THRESH_BINARY);
+      	findContours( thresh_result, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+      	/// Approximate contours to polygons + get bounding rects and circles
+      	vector<vector<Point> > contours_poly( contours.size() );
+      	vector<Rect> boundRect( contours.size() );
+      	//vector<Point2f>center( contours.size() );
+      	//vector<float>radius( contours.size() );
+	    for( int i = 0; i < contours.size(); i++ ){
+	        approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
+	         boundRect[i] = boundingRect( Mat(contours_poly[i]) );
+	         //minEnclosingCircle( (Mat)contours_poly[i], center[i], radius[i] );
+	    }
+      	contour_map[thresh] = boundRect;
       //cout << "adding " << boundRect.size() << "to thresh " << thresh << endl;
-      contours.clear();
-      contours.shrink_to_fit();
-      hierarchy.clear();
-      hierarchy.shrink_to_fit();
-      boundRect.clear();
-      boundRect.shrink_to_fit();  
-      contours_poly.clear();
-      contours_poly.shrink_to_fit();
-      thresh_result.release();
-  }
-
-  //cout << "size of contour map is "<< contour_map.size() << endl;
-  map<int,vector<Rect>> body_map;
-  for (int index = max;index >= max - INTEREST_THRESH;index--){
-      vector<Rect> max_rects = contour_map[index];
-      for (Rect rect : max_rects){
-        find_body(rect,contour_map,max,0,body_map);
-      }
-      max_rects.clear();
-  }
-  if(body_map.size()> 0){
-
-    vector<Rect> bodies ;
+      	contours.clear();
+      	contours.shrink_to_fit();
+      	hierarchy.clear();
+      	hierarchy.shrink_to_fit();
+      	boundRect.clear();
+      	boundRect.shrink_to_fit();  
+      	contours_poly.clear();
+      	contours_poly.shrink_to_fit();
+      	thresh_result.release();
+  	}
+  	return contour_map;
+}
+vector<Rect> extract_bodies(map<int,vector<Rect>>& body_map){
+ 	vector<Rect> bodies ;
     for (map<int,vector<Rect>>::iterator it = body_map.begin();it !=body_map.end(); it++){
         bodies.insert(bodies.end(),it->second.begin(),it->second.end());
     }
@@ -684,21 +664,41 @@ void contour_detector(Mat im, int frameN,vector<Person>& people){
     	if(!resized)
     		break;
     }
-    map<int,Body> body_confidence = find_matching_contours(contour_map,bodies);
-    if(body_confidence.size()>0){
-    	for( int i = 0; i< bodies.size(); i++ ){
-    		//cout << "body area " << bodies[i].area()<<endl;
-      		Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-      		//drawContours( drawing, contours_poly, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
-      		rectangle( org_im, bodies[i].tl(), bodies[i].br(), 25, 2, 8, 0 );
-    	}
-    	update_people_info2(body_confidence , people ,frameN);
-    	//pause();
-    }
-    update_people_status(people,frameN);
-   	show_image(org_im);
-   	//pause();
-  }
+    return bodies;
+}
+void contour_detector(Mat im, int frameN,vector<Person>& people){
+	Mat org_im;
+  	org_im = im.clone();
+  	RNG rng(12345);
+  	double min,max;
+	minMaxIdx(im,&min,&max);
+	if(max - min >=4){
+		map<int,vector<Rect>> contour_map = counter_map_extract(im);
+		map<int,vector<Rect>> body_map;
+		for (int index = max;index >= max - INTEREST_THRESH;index--){
+			vector<Rect> max_rects = contour_map[index];
+			for (Rect rect : max_rects){
+				find_body(rect,contour_map,max,0,body_map);
+			}
+			max_rects.clear();
+		}
+		if(body_map.size()> 0){
+			vector<Rect> bodies = extract_bodies(body_map);
+			map<int,Body> body_confidence = find_matching_contours(contour_map,bodies);
+			if(body_confidence.size()>0){
+		    	for( int i = 0; i< bodies.size(); i++ ){
+			    	Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+			      	rectangle( org_im, bodies[i].tl(), bodies[i].br(), 25, 2, 8, 0 );
+		    	}
+		    	update_people_info2(body_confidence , people ,frameN);
+				//pause();
+			}
+		}
+	}
+	
+	update_people_status(people,frameN);
+	show_image(org_im);
+	//pause();
 }
 
 void read_from_file(string file_name){
