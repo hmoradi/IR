@@ -14,12 +14,16 @@
 #include <fstream>
 #include "params.h"
 
+
+
+#include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat)
+#include <opencv2/highgui/highgui.hpp>  // Video write
 using namespace cv;
 using namespace std;
 char temp;
 #define pause() (cin >> temp)
 
-#define PacketLength 134
+
 struct ftdi_context *ftdi;
 unsigned char residue[1024] ;
 static int exitRequested = 0;
@@ -28,6 +32,7 @@ static int frameN = 0;
 static int people_inside = 0;
 enum status {UNKNOWN, ENTERED,  LEFT};
 enum direction {UNKNOWNDIR, LtoR , RtoL};
+
 
 struct Body {
 	int ID_;
@@ -42,6 +47,7 @@ struct bodyCompare {
 	}
 	
 };
+
 struct Person {
 	map<int,Body> trajectory;
 	status status_;
@@ -58,7 +64,20 @@ float calc_match_weight (Person person_ , Body body){
 	double distance =  norm(last_location->second.rect_.tl()-body.rect_.tl());
 	float size = abs(last_location->second.rect_.area() - body.rect_.area()) / last_location->second.rect_.area(); 
 	float T = abs(last_location->second.T - body.T) / last_location->second.T;
-	return   6.0 / max((distance + 3*size + 2*T),0.001) ;
+	float dir = 0;
+	if(person_.direction_ == LtoR){
+		if (last_location->second.rect_.x + (last_location->second.rect_.width / 2) <= body.rect_.x + (body.rect_.width / 2))
+			dir = -1;
+		else 
+			dir = 1;
+	}
+	else if(person_.direction_ == RtoL){
+		if (last_location->second.rect_.x + (last_location->second.rect_.width / 2) >= body.rect_.x + (body.rect_.width / 2))
+			dir = -1;
+		else 
+			dir = 1;
+	}
+	return   7.0 / max((distance + 3*size + 2*T+dir),0.001) ;
 }
 float avg_(int start, int end, vector<int> input_){
 	//cout << "averageing vector with size "<< input_.size() << "starting from " << start << "ending at" << end << endl;
@@ -77,7 +96,7 @@ void update_people_status(vector<Person>& people, int frameN){
 			left_person++;
 			continue;
 		}
-		//cout << "updateding status for " << people.size() - left_person<< "people" << endl;
+		//cout << "at frame "<<frameN << "updateding status for " << people.size() - left_person<< "people" << endl;
 		if(person_.status_ == UNKNOWN){
 			person_.status_ = ENTERED;
 		}
@@ -88,6 +107,7 @@ void update_people_status(vector<Person>& people, int frameN){
 				vector<int> sorted_locations;
 			
 				float frame_confidence = 0;
+				float frame_T = 0;
 				int min_x = extended_resolution;
 				int min_t = 0;
 				int max_x = 0;
@@ -97,7 +117,7 @@ void update_people_status(vector<Person>& people, int frameN){
 					sorted_locations.push_back(item.second.rect_.x+ (item.second.rect_.width / 2));
 				
 					frame_confidence += item.second.confidence;
-				
+					frame_T += item.second.T;
 					min_t = min(min_t,item.first);
 					max_t = max(max_t,item.first);
 					//cout << "person id " <<person_.ID_ << " trajectory frame "<< item.first << endl;
@@ -107,8 +127,10 @@ void update_people_status(vector<Person>& people, int frameN){
 				min_x = sorted_locations.at(0);
 				float speed = (float)(max_x - min_x)/(float)(max(max_t-min_t,1));
 				float avg_confidence = frame_confidence /(float)locations.size();
+				float avg_T = frame_T / (float)(locations.size());
 				if(locations.size() >= 2 and speed != 0){
 					cout << "avg confidence is " << avg_confidence <<" locatoin size "<<locations.size() << " spped "<< speed << endl;
+					
 					float first_half_average = avg_(0, locations.size()/2,locations);    
 					float second_half_average = avg_(((locations.size()/2)) , locations.size(),locations);
 					if(first_half_average < second_half_average){
@@ -125,7 +147,8 @@ void update_people_status(vector<Person>& people, int frameN){
 						else
 							people_inside ++;
 					}
-					cout << "person temperature is " << person_.last_body_seen.T << endl;
+					cout << "person temperature is " << avg_T << endl;
+					cout << "frame " << frameN << endl;
 					//pause();
 				}else if(speed > 10 and speed < 120){
 					if(person_.direction_ == LtoR)
@@ -135,7 +158,7 @@ void update_people_status(vector<Person>& people, int frameN){
 					else
 						cout << "speed move without direction detected "<< endl;
 
-				}else if(avg_confidence > 2){
+				}else if(avg_confidence > .8){
 					if(person_.direction_ == LtoR)
 						cout << "confidence move from left to right"<< endl;
 					else if(person_.direction_ == RtoL)
@@ -181,6 +204,8 @@ void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, i
 		person_ID++;
 		num_of_persons++;
 	}
+	
+
 	people.clear();
 	float** pairs_matrix = new float*[num_of_bodies];
 	for(int i=0;i < num_of_bodies;i++)
@@ -220,6 +245,7 @@ void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, i
 			persons.at(max_col).last_body_seen = bodies.at(max_row);
 			people.push_back(persons.at(max_col));
 			matched[max_row] = max_col;
+			//cout << "person " << max_col << "matched with body " << max_row << endl;
 			for(int k=0;k<num_of_persons;k++)
 				pairs_matrix[max_row][k] = -1;
 			for(int k=0;k<num_of_bodies;k++)
@@ -239,6 +265,7 @@ void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, i
 			new_one.ID_ = person_ID;
 			person_ID++;
 			people.push_back(new_one);
+			//cout << "new person created " << endl;
 		}
 	}
 	bool found = false;
@@ -253,6 +280,8 @@ void update_people_info2(map<int,Body> body_confidence,vector<Person>& people, i
 			people.push_back(person_);
 		}
 	}
+	//if(num_of_bodies> 1)
+	//	pause();
 }
 
 //prints system time 
@@ -340,25 +369,6 @@ int** print_packet(unsigned char* buf,int index){
             k+=2;
         }
     }   
-    
-    //
-    
-    
-    //for(int i = 0; i < 8; i++){     
-    //    if(PRINT_FRAME)
-	//		printf("%ld %d %d ",epoch, frameNumber,thermistor_data/16);
-    //    for(int j = 0; j < 8; j++){
-	//		if(PRINT_FRAME)
-	//			printf("%d ", IR_array_data[i][j]/4); //by looking at the datasheet, the LSB stands for .25 degree C.
-	//		frame[i][j] = IR_array_data[i][j]/4;
-	//	}
-    //    if(PRINT_FRAME)
-	//		printf("\n");
-   // }
-    
-   
-    //
-   // fflush(stdout);
     return frame;
 }
 
@@ -434,7 +444,8 @@ Mat resize_frame(Mat im, int frameN){
 	return result;
 }
 
-void show_image(Mat im){
+void show_image(Mat im,VideoWriter outputVideo){
+   
    frameN ++;
    if(!showImage)
    	   return;
@@ -448,12 +459,13 @@ void show_image(Mat im){
    double fontScale = 1;
    int thickness = 1; 
    if(scaleImage){
-   	    convertScaleAbs(im,scaled_image,255 / max);
+   	    convertScaleAbs(im,scaled_image,255 / 26);
    	    applyColorMap(scaled_image,im_color,COLORMAP_JET);
    	    flip(im_color,display,0);
    	    putText(display, to_string(people_inside), textOrg, fontFace,fontScale,Scalar::all(40),thickness,8  );
    	    namedWindow("key points- scaled",CV_WINDOW_AUTOSIZE);
    	    imshow("key points- scaled",display);
+   	    outputVideo.write(display);
    }else{
         applyColorMap(im,im_color,COLORMAP_JET);
 		namedWindow("key points - raw image",CV_WINDOW_AUTOSIZE);
@@ -513,29 +525,39 @@ void blob_detect(Mat im){
         Mat im_with_key_points;
         //drawKeypionts(im,keypoints,im_with_key_points,Scalar(0,0,255),DrawMatchesFlags::DRAW_RTCH_KEYPOINTS);
         drawKeypoints(im,keypoints,im_with_key_points,Scalar(0,0,15),DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
-        show_image(im_with_key_points);
+        //show_image(im_with_key_points);
     }
 }
 
 void find_body(Rect candidate_rect, map<int,vector<Rect>> contour_map, int thresh , int level,map<int,vector<Rect>>& body_map){
+  
   int maxx = (RECTMAXAREA*extended_resolution*extended_resolution)/100;
   int minx = (RECTMINAREA*extended_resolution*extended_resolution)/1000;
   minx = 5;
   if (candidate_rect.area() >= maxx or candidate_rect.area() < minx)
         return;
   vector<Rect> rects = contour_map[thresh-1];
+  //cout << "find body is called at thresh " << thresh << "and there are " << rects.size() << "rects in lower layer"<<endl;
+  //cout << "rect " << candidate_rect.x << " " << candidate_rect.area() << "at thresh " << thresh << "is trying to match with " << rects.size() <<endl; 
   for (Rect rect : rects  ){
     if (rect.area() >= maxx or rect.area() < minx)
         continue;
     Rect intersect = candidate_rect & rect;
-    if (intersect == candidate_rect){
-      if(level == 2){
-        if (body_map.find(thresh - 1) == body_map.end()){
-          body_map[thresh - 1]= vector<Rect>();
+    float percentage = (float)intersect.area() / (float)min(candidate_rect.area(),rect.area());
+    //cout << "cand rect x " << candidate_rect.x << "rect is " << rect.x << endl;
+    if (percentage >= 0.7){
+      //cout << "matched with rect " << rect.x << " " << rect.area() << endl;
+      if(level == 1){
+        bool inserted = false;
+        for(Rect rect_temp : body_map[thresh-1]){
+        	if (rect_temp == rect)
+        		inserted = true;
         }
-        body_map[thresh-1].push_back(rect);
+        if(!inserted)
+        	body_map[thresh-1].push_back(rect);
       }
       else{
+        //cout << "rect " << rect.x << "sent to find_body at thresh " << thresh -1 << endl;
         find_body(rect,contour_map,thresh -1,level + 1,body_map);  
       } 
     }
@@ -566,14 +588,14 @@ map<int,Body> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector<
         }
         Rect coverage = result & body;
         float coverage_conf = (float)coverage.area() / (float)(body| coverage).area();
-        float temp_conf = 1.0 / (float)max(1, abs(25 - temperature));
+        float temp_conf = 1.0 -((float)abs(25 - temperature) / 10.0);
         float height_conf = (float)result.height / (float)extended_resolution;
         float width_conf = (float)result.width / (float)extended_resolution;
         float size_conf = (float)(body.area()) / (float)(extended_resolution*extended_resolution);
-        confidence += (float)(5*temp_conf + coverage_conf + height_conf+size_conf- width_conf)/8.0 ;
+        confidence += (float)(7*temp_conf + coverage_conf + height_conf+size_conf)/10.0 ;
     }
     //cout << "new confidence is "  << confidence << endl;
-    if(confidence >= 1.0){
+    if(confidence >= 1.9){
 		Body body_ ;
 		body_.rect_ = body;
 		body_.T = temperature;
@@ -602,9 +624,15 @@ map<int, Body> find_matching_contours(map<int,vector<Rect>> contour_map , vector
   return body_confidence;
 }
 bool match_to_body(Rect a, Rect b){
-	int min_x = max(a.x,b.x);
-	int max_x = min(a.x+a.width,b.x+b.width);
-	if((float)(max_x - min_x) / (float)(min(a.width,b.width)) > .7)
+	//int min_x = max(a.x,b.x);
+	//int max_x = min(a.x+a.width,b.x+b.width);
+	int min_x = min (a.x, b.x);
+	int max_x = max (a.x + a.width,b.x+ b.width);
+	int distance = max_x - min_x ;
+	//if((float)(max_x - min_x) / (float)(min(a.width,b.width)) > .7)
+	//cout << "rect a " << a.x <<" "<< a.width << "rect b" << b.x <<" "<< b.width << endl;
+	//cout << "dist is " << distance << " and " << max(a.width,b.width) << endl;
+	if(abs(distance - max(a.width,b.width)) < 5)
 		return true;
 	return false;
 }
@@ -623,15 +651,12 @@ map<int,vector<Rect>> counter_map_extract(Mat im){
       	/// Approximate contours to polygons + get bounding rects and circles
       	vector<vector<Point> > contours_poly( contours.size() );
       	vector<Rect> boundRect( contours.size() );
-      	//vector<Point2f>center( contours.size() );
-      	//vector<float>radius( contours.size() );
+      	
 	    for( int i = 0; i < contours.size(); i++ ){
 	        approxPolyDP( Mat(contours[i]), contours_poly[i], 3, true );
 	         boundRect[i] = boundingRect( Mat(contours_poly[i]) );
-	         //minEnclosingCircle( (Mat)contours_poly[i], center[i], radius[i] );
 	    }
       	contour_map[thresh] = boundRect;
-      //cout << "adding " << boundRect.size() << "to thresh " << thresh << endl;
       	contours.clear();
       	contours.shrink_to_fit();
       	hierarchy.clear();
@@ -649,6 +674,7 @@ vector<Rect> extract_bodies(map<int,vector<Rect>>& body_map){
     for (map<int,vector<Rect>>::iterator it = body_map.begin();it !=body_map.end(); it++){
         bodies.insert(bodies.end(),it->second.begin(),it->second.end());
     }
+    //cout << "potential body rects before merging "<< bodies.size() << endl;
     bool resized = false;
     while(true){
     	resized = false;
@@ -665,31 +691,35 @@ vector<Rect> extract_bodies(map<int,vector<Rect>>& body_map){
     	if(!resized)
     		break;
     }
+    //cout << "potential body rects after merging "<< bodies.size() << endl;
     return bodies;
 }
-void contour_detector(Mat im, int frameN,vector<Person>& people){
+void contour_detector(Mat im, int frameN,vector<Person>& people,VideoWriter outputVideo){
 	Mat org_im;
   	org_im = im.clone();
   	RNG rng(12345);
   	double min,max;
 	minMaxIdx(im,&min,&max);
-	if(max - min >=4){
+	if(max - min >=5){
 		map<int,vector<Rect>> contour_map = counter_map_extract(im);
-		map<int,vector<Rect>> body_map;
+		map<int,vector<Rect>> layerd_countors;
 		for (int index = max;index >= max - INTEREST_THRESH;index--){
 			vector<Rect> max_rects = contour_map[index];
+			//cout << "##### at index " << index << "with " << max_rects.size() << "body nomenies " << endl;
 			for (Rect rect : max_rects){
-				find_body(rect,contour_map,max,0,body_map);
+				//cout << "calling find body in thersh " << index <<"with rect "<<rect.x << endl;
+				find_body(rect,contour_map,index,0,layerd_countors);
 			}
 			max_rects.clear();
 		}
-		if(body_map.size()> 0){
-			vector<Rect> bodies = extract_bodies(body_map);
-			map<int,Body> body_confidence = find_matching_contours(contour_map,bodies);
+		if(layerd_countors.size()> 0){
+			vector<Rect> body_rects = extract_bodies(layerd_countors);
+			//cout << "potential body rects " << body_rects.size() << endl;
+			map<int,Body> body_confidence = find_matching_contours(contour_map,body_rects);
 			if(body_confidence.size()>0){
-		    	for( int i = 0; i< bodies.size(); i++ ){
+		    	for( int i = 0; i< body_rects.size(); i++ ){
 			    	Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
-			      	rectangle( org_im, bodies[i].tl(), bodies[i].br(), 25, 2, 8, 0 );
+			      	rectangle( org_im, body_rects[i].tl(), body_rects[i].br(), 25, 2, 8, 0 );
 		    	}
 		    	update_people_info2(body_confidence , people ,frameN);
 				//pause();
@@ -698,11 +728,11 @@ void contour_detector(Mat im, int frameN,vector<Person>& people){
 	}
 	
 	update_people_status(people,frameN);
-	show_image(org_im);
+	show_image(org_im,outputVideo);
 	//pause();
 }
 
-void read_from_file(string file_name){
+void read_from_file(string file_name,VideoWriter outputVideo){
     std::ifstream infile(file_name);
     int** frame = NULL;
     int frameN = 0;
@@ -725,14 +755,23 @@ void read_from_file(string file_name){
        if(blobDetection)
        		blob_detect(extended_im);
        if(contourDetection)
-       		contour_detector(extended_im,frameN,people);
+       		contour_detector(extended_im,frameN,people,outputVideo);
     }
 }
 
 int main(int argc, char **argv){
+    VideoWriter outputVideo;
+   Size S = Size(extended_resolution,extended_resolution);
+   //int ex = VideoWriter::fourcc('P','I','M','1');
+   outputVideo.open("test.avi", -1, 10, S, false);
+    if (!outputVideo.isOpened())
+    {
+        cout  << "Could not open the output video for write: " << endl;
+        return 0;
+    }
     if(LIVE == false){
 		cout << "reading from file" << endl;
-		read_from_file(input_file_name);
+		read_from_file(input_file_name,outputVideo);
 		return 0;
 	}
     unsigned char buf[1024];
@@ -805,7 +844,7 @@ int main(int argc, char **argv){
 				if(blobDetection)
 					blob_detect(extended_im);
 				if(contourDetection)
-					contour_detector(extended_im,it->first,people);
+					contour_detector(extended_im,it->first,people,outputVideo);
             }
             frames.clear();
             

@@ -1,10 +1,27 @@
+// General configuration
 #define extended_resolution 256
-#define input_file_name "../data/24.txt"
-#define blobDetection false
-#define contourDetection true  // add comments to eveything and sperate in sections
+#define contourDetection true  
+#define RECTMAXAREA 80
+#define RECTMINAREA 1
+#define INTEREST_THRESH 3
+#define OPOSITE_DIRECTION true
+#define DEBUGLEVEL 1
+//Debug Configuration
+#define PRINT_FRAME false
+//Offline stream
+#define input_file_name "../data/d150_1.txt"
+#define START_FRAME 1
+#define END_FRAME 600
+//Live Stream
+#define LIVE false
+#define PacketLength 134
+//GUI Settings
 #define colorMap true
-#define scaleImage true
-#define showImage true
+#define scaleImage true  // scale image to focus on colors
+#define showImage true //show all the frames
+#define WAIT_TIME 100
+//OpenCV Blob Detection Parameteres 
+#define blobDetection false
 #define blobMinThreshold 12
 #define blobMaxThreshold 25
 #define blobThresholdStep 1
@@ -23,12 +40,3 @@
 #define blobMaxInertiaRatio 1
 #define blobFilterByColor false
 #define blobColor 255
-#define RECTMAXAREA 70
-#define RECTMINAREA 1
-#define INTEREST_THRESH 1
-#define START_FRAME 75
-#define END_FRAME 600
-#define LIVE true
-#define PRINT_FRAME false
-#define WAIT_TIME 1
-#define OPOSITE_DIRECTION false
