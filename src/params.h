@@ -4,8 +4,13 @@
 #define RECTMAXAREA 80
 #define RECTMINAREA 1
 #define INTEREST_THRESH 3
-#define OPOSITE_DIRECTION true
-#define DEBUGLEVEL 1
+#define OPOSITE_DIRECTION false
+#define BODY_THRESHOLD 2.7
+#define TRAJECTORY_LENGTH 4
+#define DETECTION_DELAY 5
+#define SAVE_VIDEO false
+#define enable_publishing_indicator_count true
+#define reset_count_at_midnight true
 //Debug Configuration
 #define PRINT_FRAME false
 //Offline stream

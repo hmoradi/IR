@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.o  -o XMPPUtils_test -rdynamic libextendxmpp.a -lstrophe -lpthread 

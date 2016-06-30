@@ -123,6 +123,85 @@ blob/fast:
 	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/build
 .PHONY : blob/fast
 
+#=============================================================================
+# Target rules for targets named extendxmpp
+
+# Build rule for target.
+extendxmpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 extendxmpp
+.PHONY : extendxmpp
+
+# fast build rule for target.
+extendxmpp/fast:
+	$(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/build
+.PHONY : extendxmpp/fast
+
+#=============================================================================
+# Target rules for targets named XMPPWorker_test
+
+# Build rule for target.
+XMPPWorker_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 XMPPWorker_test
+.PHONY : XMPPWorker_test
+
+# fast build rule for target.
+XMPPWorker_test/fast:
+	$(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build
+.PHONY : XMPPWorker_test/fast
+
+#=============================================================================
+# Target rules for targets named XMPPUtils_test
+
+# Build rule for target.
+XMPPUtils_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 XMPPUtils_test
+.PHONY : XMPPUtils_test
+
+# fast build rule for target.
+XMPPUtils_test/fast:
+	$(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build
+.PHONY : XMPPUtils_test/fast
+
+#=============================================================================
+# Target rules for targets named TransactionQueue_test
+
+# Build rule for target.
+TransactionQueue_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 TransactionQueue_test
+.PHONY : TransactionQueue_test
+
+# fast build rule for target.
+TransactionQueue_test/fast:
+	$(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build
+.PHONY : TransactionQueue_test/fast
+
+src/XMPPInterface.o: src/XMPPInterface.cpp.o
+
+.PHONY : src/XMPPInterface.o
+
+# target to build an object file
+src/XMPPInterface.cpp.o:
+	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/XMPPInterface.cpp.o
+.PHONY : src/XMPPInterface.cpp.o
+
+src/XMPPInterface.i: src/XMPPInterface.cpp.i
+
+.PHONY : src/XMPPInterface.i
+
+# target to preprocess a source file
+src/XMPPInterface.cpp.i:
+	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/XMPPInterface.cpp.i
+.PHONY : src/XMPPInterface.cpp.i
+
+src/XMPPInterface.s: src/XMPPInterface.cpp.s
+
+.PHONY : src/XMPPInterface.s
+
+# target to generate assembly for a file
+src/XMPPInterface.cpp.s:
+	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/XMPPInterface.cpp.s
+.PHONY : src/XMPPInterface.cpp.s
+
 src/blob.o: src/blob.cpp.o
 
 .PHONY : src/blob.o
@@ -159,6 +238,13 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... blob"
+	@echo "... extendxmpp"
+	@echo "... XMPPWorker_test"
+	@echo "... XMPPUtils_test"
+	@echo "... TransactionQueue_test"
+	@echo "... src/XMPPInterface.o"
+	@echo "... src/XMPPInterface.i"
+	@echo "... src/XMPPInterface.s"
 	@echo "... src/blob.o"
 	@echo "... src/blob.i"
 	@echo "... src/blob.s"

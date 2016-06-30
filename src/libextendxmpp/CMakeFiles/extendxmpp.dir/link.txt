@@ -1,0 +1,2 @@
+/usr/bin/ar qc libextendxmpp.a  CMakeFiles/extendxmpp.dir/Stanza.cc.o CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o CMakeFiles/extendxmpp.dir/Transaction.cc.o CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o
+/usr/bin/ranlib libextendxmpp.a

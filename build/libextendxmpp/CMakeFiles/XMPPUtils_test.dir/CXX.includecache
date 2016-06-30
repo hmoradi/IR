@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.h
+string
+-
+
+/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils_test.cc
+iostream
+-
+cstdio
+-
+cstdlib
+-
+cstddef
+-
+XMPPUtils.h
+/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.h
+

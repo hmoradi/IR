@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/hessam/Desktop/IR/IR/src -I/home/hessam/Desktop/IR/IR -I/home/hessam/Desktop/IR/IR/build -I/usr/include/opencv 
+CXX_INCLUDES = -I/home/hessam/Desktop/IR/IR/src -I/home/hessam/Desktop/IR/IR -I/home/hessam/Desktop/IR/IR/build -I/usr/include/opencv -I/home/hessam/Desktop/IR/IR/libextendxmpp 
 

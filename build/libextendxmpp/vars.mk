@@ -1,0 +1,8 @@
+LIBEXTENDXMPP_LIBS=Stanza StanzaQueue
+LIBEXTENDXMPP_LIBS+=Transaction TransactionQueue
+LIBEXTENDXMPP_LIBS+=XMPPWorker
+LIBEXTENDXMPP_LIBS+=XMPPUtils
+#LIBEXTENDXMPP_LIBS+=PubSub
+
+LDLIBS += -lstrophe
+LDLIBS += -lpthread

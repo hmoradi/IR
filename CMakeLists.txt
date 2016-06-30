@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
         )
@@ -15,3 +16,8 @@ target_link_libraries( blob ${OpenCV_LIBS} )
 target_link_libraries(blob ftdi1)
 
 include_directories(BEFORE ${CMAKE_SOURCE_DIR}/src)
+
+add_subdirectory(libextendxmpp)
+include_directories(libextendxmpp)
+
+target_link_libraries(blob extendxmpp)

@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/blob.dir/src/XMPPInterface.cpp.o"
   "CMakeFiles/blob.dir/src/blob.cpp.o"
   "blob.pdb"
   "blob"

@@ -1,0 +1,6 @@
+/home/hessam/libextendxmpp.git/CMakeFiles/edit_cache.dir
+/home/hessam/libextendxmpp.git/CMakeFiles/rebuild_cache.dir
+/home/hessam/libextendxmpp.git/CMakeFiles/extendxmpp.dir
+/home/hessam/libextendxmpp.git/CMakeFiles/XMPPWorker_test.dir
+/home/hessam/libextendxmpp.git/CMakeFiles/XMPPUtils_test.dir
+/home/hessam/libextendxmpp.git/CMakeFiles/TransactionQueue_test.dir

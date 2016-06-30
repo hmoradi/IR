@@ -6,24 +6,38 @@
 #include "ftdi.h"
 #include <time.h>
 #include <string.h>
-
+#include <atomic>  
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <fstream>
 #include "params.h"
-
-
-
-#include <opencv2/core/core.hpp>        // Basic OpenCV structures (cv::Mat)
-#include <opencv2/highgui/highgui.hpp>  // Video write
+#include <chrono>
+#include <thread>
+#include <opencv2/core/core.hpp>        
+#include <opencv2/highgui/highgui.hpp>  
 using namespace cv;
 using namespace std;
 char temp;
 #define pause() (cin >> temp)
 
+//#define ENABLE_XMPP_REPORTING
 
+#ifdef ENABLE_XMPP_REPORTING
+#include "XMPPInterface.h"
+/* XMPP Settings */
+#define XMPP_JID  "fork1@sensor.andrew.cmu.edu"
+#define XMPP_PASS "boschtop75"
+#define XMPP_NODE ("FORK018003251847") //getSerialNo()).c_str() )
+#define XMPP_PARENT_NODE ( ("FORK" + getParentInfo()).c_str() ) //This is the node ID, where the offset of occupancy change will be published
+#define XMPP_VERBOSITY 3
+#endif
+#ifdef ENABLE_XMPP_REPORTING
+	XMPPInterface *xmpp;
+#endif
+
+int actuation_request_count = 0;
 struct ftdi_context *ftdi;
 unsigned char residue[1024] ;
 static int exitRequested = 0;
@@ -32,8 +46,10 @@ static int frameN = 0;
 static int people_inside = 0;
 enum status {UNKNOWN, ENTERED,  LEFT};
 enum direction {UNKNOWNDIR, LtoR , RtoL};
-
-
+bool enable_distributed_coordination= true;
+int ignore_actuation_request_count = 3;
+bool enable_actuation = true;
+int person_count_last = people_inside;
 struct Body {
 	int ID_;
 	Rect rect_;
@@ -58,6 +74,78 @@ struct Person {
 	Body last_body_seen;
 	int trajectory_size;
 };
+
+std::string getParentInfo(){
+	if(!LIVE)
+		return "_BOSCH_OFFICE_MAIN";
+	else {
+		return "_BOSCH_OFFICE_MAIN"; //for the unknown nodes
+	}
+}
+void report_updated_people_count(int indicator_count, int new_count, int offset) //indicator_count: -200 (forced reset/restart), -300(actuation over the network)
+// offset indicates (new count - old count). It can be negative.
+{
+	//if(log_occ_estimation) {
+	//	const char *timestamp = create_timestamp();
+	//	log_file << timestamp << " " << indicator_count << "\n"; //dataset will indicate here is where the FORK started running or had a forced restart
+	//	log_file << timestamp << " " << new_count << "\n"; //reporting the initial count 
+	//	delete[] timestamp;
+	//}
+	#ifdef ENABLE_XMPP_REPORTING
+		if(enable_publishing_indicator_count)
+	    	xmpp->occupancyChange(indicator_count, 0);   //dataset will indicate here is where the FORK started running or had a forced restart or received a new count over the network
+	    // offset is 0
+	    xmpp->occupancyChange(new_count, offset); //reporting the initial count
+	#endif
+}
+void update_people_count_handler(int param){
+	#ifdef ENABLE_XMPP_REPORTING
+		if(param == SIGUSR1)
+		{
+			int new_count = xmpp->get_actuation_count();
+			cout <<"In FORK_RT, updated count: " <<  new_count << endl;
+			
+			actuation_request_count++;
+			
+		//	if(new_count == -500) //start data collection
+		//	{
+		//		store_depth_images = true;
+		//		process_images = false;
+		//	}
+			
+		//	if(new_count == -600)	//stop data collection
+		//	{
+		//		store_depth_images = false;
+		//		process_images = true;
+		//	}
+			
+			if((actuation_request_count > ignore_actuation_request_count) && (new_count > -450)){
+				int offset = new_count - people_inside;
+				people_inside = new_count;
+				report_updated_people_count(-300, new_count, offset);  //-300 means it was reset over the network
+			}
+		}
+	#endif
+}
+void reset_occupancy_count( unsigned int initial_wait_time, atomic<bool>& timer_keeps_running)
+{
+
+	// First, wait until midnight
+	const auto initial_wait = chrono::seconds(initial_wait_time);
+    this_thread::sleep_for(initial_wait) ;
+
+	//Then at midnight, reset count and wait 1 more day
+	const auto next_interval = chrono::seconds(24*60*60);//delay for the next day, in seconds
+    while( timer_keeps_running )
+    {
+    	int offset = -people_inside;
+    	people_inside = 0; //We may need to use mutex in the future. Assuming that at 12:00 AM we will not run into a race condition.
+		report_updated_people_count(-200, people_inside, offset);
+
+		//wait until the next 24 hours     
+        this_thread::sleep_for(next_interval) ;
+    }
+}
 
 float calc_match_weight (Person person_ , Body body){
 	map<int,Body>::reverse_iterator last_location = person_.trajectory.rbegin();
@@ -101,7 +189,7 @@ void update_people_status(vector<Person>& people, int frameN){
 			person_.status_ = ENTERED;
 		}
 		else if (person_.status_ == ENTERED){
-			if(frameN - person_.last_frame_seen >= 10){ //Old Person
+			if(frameN - person_.last_frame_seen >= DETECTION_DELAY){ //Old Person
 				person_.status_= LEFT;
 				vector<int> locations ;
 				vector<int> sorted_locations;
@@ -128,7 +216,7 @@ void update_people_status(vector<Person>& people, int frameN){
 				float speed = (float)(max_x - min_x)/(float)(max(max_t-min_t,1));
 				float avg_confidence = frame_confidence /(float)locations.size();
 				float avg_T = frame_T / (float)(locations.size());
-				if(locations.size() >= 2 and speed != 0){
+				if(locations.size() >= TRAJECTORY_LENGTH and speed != 0){
 					cout << "avg confidence is " << avg_confidence <<" locatoin size "<<locations.size() << " spped "<< speed << endl;
 					
 					float first_half_average = avg_(0, locations.size()/2,locations);    
@@ -464,8 +552,11 @@ void show_image(Mat im,VideoWriter outputVideo){
    	    flip(im_color,display,0);
    	    putText(display, to_string(people_inside), textOrg, fontFace,fontScale,Scalar::all(40),thickness,8  );
    	    namedWindow("key points- scaled",CV_WINDOW_AUTOSIZE);
+
+   	    if(SAVE_VIDEO)
+   	    	outputVideo.write(display);
    	    imshow("key points- scaled",display);
-   	    outputVideo.write(display);
+   	    
    }else{
         applyColorMap(im,im_color,COLORMAP_JET);
 		namedWindow("key points - raw image",CV_WINDOW_AUTOSIZE);
@@ -473,7 +564,23 @@ void show_image(Mat im,VideoWriter outputVideo){
    }
    waitKey(WAIT_TIME);
 }
+void show_scaled (Mat im){
+	Mat scaled= Mat::zeros(256,256,CV_8UC1);
+	for(int i=0;i<256;i++){
+		for(int j=0;j<256;j++){
+			scaled.at<uchar>(i,j)=im.at<uchar>(i/32,j/32);
+		}
+	}
+	Mat scaled_image;
+	Mat im_color;
+	Mat display;
+	convertScaleAbs(scaled,scaled_image,255 / 26);
+    applyColorMap(scaled_image,im_color,COLORMAP_JET);
+    flip(im_color,display,0);
+	namedWindow("raw input",CV_WINDOW_AUTOSIZE);
+	imshow("raw input",display);
 
+}
 void blob_detect(Mat im){
     SimpleBlobDetector::Params params;
  	
@@ -595,7 +702,7 @@ map<int,Body> calc_confidence(map<int,map<int,vector<Rect>>> body_parts, vector<
         confidence += (float)(7*temp_conf + coverage_conf + height_conf+size_conf)/10.0 ;
     }
     //cout << "new confidence is "  << confidence << endl;
-    if(confidence >= 1.9){
+    if(confidence >= BODY_THRESHOLD){
 		Body body_ ;
 		body_.rect_ = body;
 		body_.T = temperature;
@@ -731,6 +838,27 @@ void contour_detector(Mat im, int frameN,vector<Person>& people,VideoWriter outp
 	show_image(org_im,outputVideo);
 	//pause();
 }
+int compute_remaining_time_of_today(){
+
+	struct timeval tv;
+	struct tm *tm;
+
+	int current_hour, current_min, current_sec;
+	gettimeofday(&tv, NULL);
+
+	if ((tm = localtime(&tv.tv_sec)) != NULL) {
+		current_hour = tm->tm_hour; //24 hr format
+		current_min = tm->tm_min;
+		current_sec = tm->tm_sec;
+	}
+	else
+	{
+		cout << "Could not compute local time for timer based restart." << endl;
+		return 0;
+	}
+	int remaining_time = (24 - current_hour - 1)*60*60 + (60 - current_min - 1)*60 + (60 - current_sec -1) + 1;  //in seconds, assuming we will reset at 12:00 AM
+	return remaining_time;
+}
 
 void read_from_file(string file_name,VideoWriter outputVideo){
     std::ifstream infile(file_name);
@@ -756,6 +884,15 @@ void read_from_file(string file_name,VideoWriter outputVideo){
        		blob_detect(extended_im);
        if(contourDetection)
        		contour_detector(extended_im,frameN,people,outputVideo);
+       	show_scaled(im);
+       	 #ifdef ENABLE_XMPP_REPORTING
+       		if(people_inside != person_count_last){
+       			cout << "sending info " << people_inside << person_count_last << endl;
+		        xmpp->occupancyChange(people_inside, people_inside - person_count_last);	
+       		}
+       		
+		#endif
+		person_count_last = people_inside;
     }
 }
 
@@ -763,17 +900,37 @@ int main(int argc, char **argv){
     VideoWriter outputVideo;
    Size S = Size(extended_resolution,extended_resolution);
    //int ex = VideoWriter::fourcc('P','I','M','1');
-   outputVideo.open("test.avi", -1, 10, S, false);
+   outputVideo.open("test.avi",  CV_FOURCC('M','J','P','G'), 10, S, true);
     if (!outputVideo.isOpened())
     {
         cout  << "Could not open the output video for write: " << endl;
         return 0;
+    }
+    /* Initiate a timer for resetting people count at midnight */
+    atomic<bool> timer_keeps_running {true} ;
+	if(reset_count_at_midnight) {
+		int initial_wait_time = compute_remaining_time_of_today();
+		thread( reset_occupancy_count, initial_wait_time, std::ref(timer_keeps_running) ).detach() ; 
+	}
+	#ifdef ENABLE_XMPP_REPORTING
+    	xmpp = new XMPPInterface(XMPP_JID, XMPP_PASS, XMPP_NODE, XMPP_PARENT_NODE, enable_distributed_coordination, enable_actuation, XMPP_VERBOSITY);
+	#endif
+
+  	report_updated_people_count(-200, people_inside, people_inside - person_count_last); //logging + reporting initial count
+    
+ 
+    if(enable_actuation)
+    {
+    	signal(SIGUSR1, update_people_count_handler);
     }
     if(LIVE == false){
 		cout << "reading from file" << endl;
 		read_from_file(input_file_name,outputVideo);
 		return 0;
 	}
+	
+   // libfreenect2::SyncMultiFrameListener listener(libfreenect2::Frame::Depth);
+  //  libfreenect2::FrameMap frames;
     unsigned char buf[1024];
     int f = 0, i;
     int vid = 0x403;
@@ -817,10 +974,10 @@ int main(int argc, char **argv){
     map<int,int**> frames;
     print_time();
     vector<Person> people;
+    
     while (!exitRequested)
     {
-    	if(frameN > 1000)
-			return 0;
+    	
     	unsigned char buf2[1];
     	buf2[0] = '*';
     	f = ftdi_write_data(ftdi, buf2, 1); //Ask PIC24F04KA200 microcontroller to start sending data
@@ -845,12 +1002,18 @@ int main(int argc, char **argv){
 					blob_detect(extended_im);
 				if(contourDetection)
 					contour_detector(extended_im,it->first,people,outputVideo);
+				//namedWindow("raw input",CV_WINDOW_AUTOSIZE);
+				///imshow("raw input",im);
             }
             frames.clear();
             
             fflush(stderr);
             fflush(stdout);
         }
+        #ifdef ENABLE_XMPP_REPORTING
+		            xmpp->occupancyChange(people_inside, people_inside - person_count_last);
+		#endif
+		person_count_last = people_inside;
     }
     
     signal(SIGINT, SIG_DFL);
