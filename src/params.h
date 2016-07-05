@@ -13,22 +13,22 @@
 #define enable_publishing_indicator_count true
 #define ENABLE_ACTUATION false
 #define reset_count_at_midnight true
-#define ENABLE_XMPP_REPORTING false
+#define ENABLE_XMPP_REPORTING true
 #define MIN_DIFF_IN_FRAME 10
 //Debug Configuration
 #define PRINT_FRAME false
 //Offline stream
-#define input_file_name "../data/exp1.txt"
+#define input_file_name "../data/d150.txt"
 #define START_FRAME 1
 #define END_FRAME 999
 //Live Stream
-#define LIVE true
+#define LIVE false
 #define PacketLength 134
 //GUI Settings
 #define colorMap true
 #define scaleImage true  // scale image to focus on colors
 #define showImage false //show all the frames
-#define WAIT_TIME 100
+#define WAIT_TIME 1
 //OpenCV Blob Detection Parameteres 
 #define blobDetection false
 #define blobMinThreshold 12

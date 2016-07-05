@@ -82,7 +82,9 @@ void XMPPWrapper::reset_occupancy_count( unsigned int initial_wait_time, atomic<
 }
 XMPPWrapper::XMPPWrapper(){
 
+    cout << "initiation xmpp" << endl;
     this->xmpp = new XMPPInterface(XMPP_JID, XMPP_PASS, XMPP_NODE, XMPP_PARENT_NODE, enable_distributed_coordination, ENABLE_ACTUATION, XMPP_VERBOSITY); 
+    cout << "xmpp init done "<< endl;
     this-> actuation_request_count = 0;
     this-> enable_distributed_coordination= true;
     this-> ignore_actuation_request_count = 3;

@@ -10,8 +10,8 @@ using namespace std;
 #include "XMPPInterface.h"
 #define XMPP_JID  "fork1@sensor.andrew.cmu.edu"
 #define XMPP_PASS "boschtop75"
-#define XMPP_NODE ("FORK018003251847") //getSerialNo()).c_str() )
-#define XMPP_PARENT_NODE ( ("FORK" + getParentInfo()).c_str() ) //This is the node ID, where the offset of occupancy change will be published
+#define XMPP_NODE "FORK018003251847" //getSerialNo()).c_str() )
+#define XMPP_PARENT_NODE  (("FORK" + getParentInfo()).c_str())  //This is the node ID, where the offset of occupancy change will be published
 #define XMPP_VERBOSITY 3
 class XMPPWrapper{
 public:

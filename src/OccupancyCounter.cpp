@@ -514,6 +514,7 @@ void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,V
     map<string,Body> body_map;
     //cout <<"max diff is " << max - min << endl;
     if(max - min >=MIN_DIFF_IN_FRAME){
+		cout << "process frame " << frameN << endl;
         map<int,vector<Rect>> contour_map = counter_map_extract(im);
         map<int,vector<Rect>> layerd_countors;
         vector<string> taken;
