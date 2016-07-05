@@ -95,10 +95,12 @@ void read_from_file(string file_name,VideoWriter outputVideo){
     }
 }
 void update_people_count_handler(int param){
-	XMPPWrapper_.update_people_count(param,people_inside);
+	if(ENABLE_XMPP_REPORTING)
+        XMPPWrapper_.update_people_count(param,people_inside);
 }
 void reset_occupancy_count(unsigned int initial_wait_time, atomic<bool>& timer_keeps_running){
-	 XMPPWrapper_.reset_occupancy_count(initial_wait_time, timer_keeps_running,people_inside);
+	 if(ENABLE_XMPP_REPORTING)
+        XMPPWrapper_.reset_occupancy_count(initial_wait_time, timer_keeps_running,people_inside);
 }
 int compute_remaining_time_of_today(){
 
