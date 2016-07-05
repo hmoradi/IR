@@ -27,8 +27,8 @@
 //GUI Settings
 #define colorMap true
 #define scaleImage true  // scale image to focus on colors
-#define showImage true //show all the frames
-#define WAIT_TIME 1
+#define showImage false //show all the frames
+#define WAIT_TIME 100
 //OpenCV Blob Detection Parameteres 
 #define blobDetection false
 #define blobMinThreshold 12

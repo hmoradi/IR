@@ -161,8 +161,8 @@ int main(int argc, char **argv){
     	auto end = chrono::high_resolution_clock::now();
         auto dur = end - begin;
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
-        //cout << "ms passed is " << ms << endl;
-        usleep((100 - ms) * 1000);
+        cout << "ms passed is " << ms << endl;
+        usleep(std::max(0,(int)(100 - ms)) * 1000);
         int f = sensorReader.ReadFrame(buffer);
         //cout << "sensere reader returns " << f <<"bytes" << endl;
         begin = chrono::high_resolution_clock::now();
@@ -172,7 +172,7 @@ int main(int argc, char **argv){
         }
         else if( f > 130 )
         {
-            cout << "precess frame " << frameN << endl;
+            //cout << "precess frame " << frameN << endl;
             frames = sensorReader.interpret_data(buffer, f);
             for(map<int,int**>::iterator it=frames.begin();it!=frames.end();it++){
 				Mat im = OccupancyCounter_.convert_to_Mat(it->second);

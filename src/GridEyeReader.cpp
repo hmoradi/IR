@@ -77,7 +77,7 @@ void GridEyeReader::add_to_residue(unsigned char* buf, int index){
 //Prints content of serial packet received from FTDI module
 int** GridEyeReader::print_packet(unsigned char* buf,int index){
     frameNumber++;
-    cout << "reader reads frame "<<frameNumber << endl;
+    //cout << "reader reads frame "<<frameNumber << endl;
 	int** frame = new int*[8];
     for (int i=0;i<8;i++)
         frame[i] = new int[8];
