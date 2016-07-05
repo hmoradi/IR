@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.cc
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.cc
 cassert
 -
 string
@@ -16,29 +16,29 @@ strophe.h
 time.h
 -
 Stanza.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.h
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.h
 string
 -
 strophe.h
 -
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/StanzaQueue.cc
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/StanzaQueue.cc
 cstring
 -
 cstddef
 -
 StanzaQueue.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/StanzaQueue.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/StanzaQueue.h
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/StanzaQueue.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/StanzaQueue.h
 Stanza.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.h
 list
 -
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.cc
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.cc
 cstddef
 -
 cstring
@@ -48,17 +48,17 @@ cassert
 strophe.h
 -
 Stanza.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.h
 Transaction.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.h
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.h
 strophe.h
 -
 Stanza.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.h
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/TransactionQueue.cc
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/TransactionQueue.cc
 cstring
 -
 cassert
@@ -66,15 +66,15 @@ cassert
 cstddef
 -
 TransactionQueue.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/TransactionQueue.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/TransactionQueue.h
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/TransactionQueue.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/TransactionQueue.h
 list
 -
 Transaction.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.h
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.cc
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPUtils.cc
 string
 -
 cstdio
@@ -88,13 +88,13 @@ cstring
 cassert
 -
 XMPPUtils.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPUtils.h
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPUtils.h
 string
 -
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPWorker.cc
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPWorker.cc
 iostream
 -
 cassert
@@ -112,17 +112,17 @@ string.h
 stdlib.h
 -
 Stanza.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.h
 XMPPWorker.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPWorker.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPWorker.h
 
-/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPWorker.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPWorker.h
 pthread.h
 -
 Stanza.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.h
 TransactionQueue.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/TransactionQueue.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/TransactionQueue.h
 Transaction.h
-/home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.h
+/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.h
 

@@ -6,41 +6,33 @@
 
 #ifndef GRIDEYEREADER_H_
 #define GRIDEYEREADER_H_
-
-//#include <pthread.h>
-//#include <XMPPWorker.h>
-
-//#define IGNORE -50
-
+using namespace std;
 class GridEyeReader {
 public:
 	GridEyeReader();
-	//void occupancyChange(int count, int offset);
-	//int get_actuation_count();
-	//virtual ~XMPPInterface();
+	int ReadFrame(unsigned char* buf);
+	int** read_frame(std::ifstream* infile);
+	map<int,int**> interpret_data(unsigned char *buf, int len);
+	virtual ~GridEyeReader();
+
 private:
-	// const char *jid;
-	// const char *pass;
-	// const char *node;
-	// const char *parent_node;
-	// int log_level;
-	// unsigned short altport;
-	// const char * const altdomain;
-	// XMPPWorker *xwork;
-	// void print_err(const char *fmt, ...);
-	// void print_info(const char *fmt, ...);
-	// void print_dbg(const char *fmt, ...);
-	// char *pubsub_jid(const char *jid);
-	// char* create_timestamp();
-	// void create();
-	// void publish_meta();
-	// void invite_respawn();
-	// static void handler_create(Transaction *trans, void *userdata);
-	// static void handler_publish(Transaction *trans, void *userdata);
-	// static void handler_invite(Transaction *trans, void *userdata);
-	// void sendMIOMessage(const char *node, const char *timestamp, int count);
-	// void sendJSONMessage(const char *node, const char *timestamp, int count, int offset);
-	
+	//std::ifstream infile;
+	struct ftdi_context *ftdi;
+	unsigned char residue[1024] ;
+	int exitRequested = 0;
+	int frameNumber = 0;
+	unsigned char buf[1024];
+    int f ; 
+    int i;
+    int vid;
+    int pid;
+    int baudrate;
+    int interface;
+    int find_packet_head(unsigned char *buf, int index, int len);
+	void array_copy(unsigned char* dest, unsigned char* source,int start_index, int len);
+	void add_to_residue(unsigned char* buf, int index);
+	int** print_packet(unsigned char* buf,int index);
+	int Init();
 };
 
-#endif /* XMPPINTERFACE_H_ */
+#endif /* GRIDEYEREADER_H_ */

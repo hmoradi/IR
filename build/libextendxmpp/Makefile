@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/hessam/Desktop/IR/IR
+CMAKE_SOURCE_DIR = /home/hessam/Desktop/HotSpotter/IR
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/hessam/Desktop/IR/IR/build
+CMAKE_BINARY_DIR = /home/hessam/Desktop/HotSpotter/IR/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,14 +80,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/hessam/Desktop/IR/IR/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/hessam/Desktop/IR/IR/build/CMakeFiles /home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/progress.marks
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/hessam/Desktop/IR/IR/build/CMakeFiles 0
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/progress.marks
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/clean
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/clean
 .PHONY : clean
 
 # The main clean target
@@ -97,22 +97,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/preinstall
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/preinstall
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/hessam/Desktop/IR/IR/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 libextendxmpp/CMakeFiles/extendxmpp.dir/rule:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/CMakeFiles/extendxmpp.dir/rule
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/CMakeFiles/extendxmpp.dir/rule
 .PHONY : libextendxmpp/CMakeFiles/extendxmpp.dir/rule
 
 # Convenience name for target.
@@ -122,12 +122,12 @@ extendxmpp: libextendxmpp/CMakeFiles/extendxmpp.dir/rule
 
 # fast build rule for target.
 extendxmpp/fast:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/build
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/build
 .PHONY : extendxmpp/fast
 
 # Convenience name for target.
 libextendxmpp/CMakeFiles/XMPPWorker_test.dir/rule:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/CMakeFiles/XMPPWorker_test.dir/rule
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/CMakeFiles/XMPPWorker_test.dir/rule
 .PHONY : libextendxmpp/CMakeFiles/XMPPWorker_test.dir/rule
 
 # Convenience name for target.
@@ -137,12 +137,12 @@ XMPPWorker_test: libextendxmpp/CMakeFiles/XMPPWorker_test.dir/rule
 
 # fast build rule for target.
 XMPPWorker_test/fast:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build
 .PHONY : XMPPWorker_test/fast
 
 # Convenience name for target.
 libextendxmpp/CMakeFiles/XMPPUtils_test.dir/rule:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/CMakeFiles/XMPPUtils_test.dir/rule
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/CMakeFiles/XMPPUtils_test.dir/rule
 .PHONY : libextendxmpp/CMakeFiles/XMPPUtils_test.dir/rule
 
 # Convenience name for target.
@@ -152,12 +152,12 @@ XMPPUtils_test: libextendxmpp/CMakeFiles/XMPPUtils_test.dir/rule
 
 # fast build rule for target.
 XMPPUtils_test/fast:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build
 .PHONY : XMPPUtils_test/fast
 
 # Convenience name for target.
 libextendxmpp/CMakeFiles/TransactionQueue_test.dir/rule:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/CMakeFiles/TransactionQueue_test.dir/rule
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f CMakeFiles/Makefile2 libextendxmpp/CMakeFiles/TransactionQueue_test.dir/rule
 .PHONY : libextendxmpp/CMakeFiles/TransactionQueue_test.dir/rule
 
 # Convenience name for target.
@@ -167,7 +167,7 @@ TransactionQueue_test: libextendxmpp/CMakeFiles/TransactionQueue_test.dir/rule
 
 # fast build rule for target.
 TransactionQueue_test/fast:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build
 .PHONY : TransactionQueue_test/fast
 
 Stanza.o: Stanza.cc.o
@@ -176,7 +176,7 @@ Stanza.o: Stanza.cc.o
 
 # target to build an object file
 Stanza.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o
 .PHONY : Stanza.cc.o
 
 Stanza.i: Stanza.cc.i
@@ -185,7 +185,7 @@ Stanza.i: Stanza.cc.i
 
 # target to preprocess a source file
 Stanza.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.i
 .PHONY : Stanza.cc.i
 
 Stanza.s: Stanza.cc.s
@@ -194,7 +194,7 @@ Stanza.s: Stanza.cc.s
 
 # target to generate assembly for a file
 Stanza.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.s
 .PHONY : Stanza.cc.s
 
 StanzaQueue.o: StanzaQueue.cc.o
@@ -203,7 +203,7 @@ StanzaQueue.o: StanzaQueue.cc.o
 
 # target to build an object file
 StanzaQueue.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o
 .PHONY : StanzaQueue.cc.o
 
 StanzaQueue.i: StanzaQueue.cc.i
@@ -212,7 +212,7 @@ StanzaQueue.i: StanzaQueue.cc.i
 
 # target to preprocess a source file
 StanzaQueue.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.i
 .PHONY : StanzaQueue.cc.i
 
 StanzaQueue.s: StanzaQueue.cc.s
@@ -221,7 +221,7 @@ StanzaQueue.s: StanzaQueue.cc.s
 
 # target to generate assembly for a file
 StanzaQueue.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.s
 .PHONY : StanzaQueue.cc.s
 
 Transaction.o: Transaction.cc.o
@@ -230,7 +230,7 @@ Transaction.o: Transaction.cc.o
 
 # target to build an object file
 Transaction.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o
 .PHONY : Transaction.cc.o
 
 Transaction.i: Transaction.cc.i
@@ -239,7 +239,7 @@ Transaction.i: Transaction.cc.i
 
 # target to preprocess a source file
 Transaction.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.i
 .PHONY : Transaction.cc.i
 
 Transaction.s: Transaction.cc.s
@@ -248,7 +248,7 @@ Transaction.s: Transaction.cc.s
 
 # target to generate assembly for a file
 Transaction.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.s
 .PHONY : Transaction.cc.s
 
 TransactionQueue.o: TransactionQueue.cc.o
@@ -257,7 +257,7 @@ TransactionQueue.o: TransactionQueue.cc.o
 
 # target to build an object file
 TransactionQueue.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o
 .PHONY : TransactionQueue.cc.o
 
 TransactionQueue.i: TransactionQueue.cc.i
@@ -266,7 +266,7 @@ TransactionQueue.i: TransactionQueue.cc.i
 
 # target to preprocess a source file
 TransactionQueue.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.i
 .PHONY : TransactionQueue.cc.i
 
 TransactionQueue.s: TransactionQueue.cc.s
@@ -275,7 +275,7 @@ TransactionQueue.s: TransactionQueue.cc.s
 
 # target to generate assembly for a file
 TransactionQueue.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.s
 .PHONY : TransactionQueue.cc.s
 
 TransactionQueue_test.o: TransactionQueue_test.cc.o
@@ -284,7 +284,7 @@ TransactionQueue_test.o: TransactionQueue_test.cc.o
 
 # target to build an object file
 TransactionQueue_test.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/TransactionQueue_test.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/TransactionQueue_test.cc.o
 .PHONY : TransactionQueue_test.cc.o
 
 TransactionQueue_test.i: TransactionQueue_test.cc.i
@@ -293,7 +293,7 @@ TransactionQueue_test.i: TransactionQueue_test.cc.i
 
 # target to preprocess a source file
 TransactionQueue_test.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/TransactionQueue_test.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/TransactionQueue_test.cc.i
 .PHONY : TransactionQueue_test.cc.i
 
 TransactionQueue_test.s: TransactionQueue_test.cc.s
@@ -302,7 +302,7 @@ TransactionQueue_test.s: TransactionQueue_test.cc.s
 
 # target to generate assembly for a file
 TransactionQueue_test.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/TransactionQueue_test.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/TransactionQueue_test.cc.s
 .PHONY : TransactionQueue_test.cc.s
 
 XMPPUtils.o: XMPPUtils.cc.o
@@ -311,7 +311,7 @@ XMPPUtils.o: XMPPUtils.cc.o
 
 # target to build an object file
 XMPPUtils.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o
 .PHONY : XMPPUtils.cc.o
 
 XMPPUtils.i: XMPPUtils.cc.i
@@ -320,7 +320,7 @@ XMPPUtils.i: XMPPUtils.cc.i
 
 # target to preprocess a source file
 XMPPUtils.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.i
 .PHONY : XMPPUtils.cc.i
 
 XMPPUtils.s: XMPPUtils.cc.s
@@ -329,7 +329,7 @@ XMPPUtils.s: XMPPUtils.cc.s
 
 # target to generate assembly for a file
 XMPPUtils.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.s
 .PHONY : XMPPUtils.cc.s
 
 XMPPUtils_test.o: XMPPUtils_test.cc.o
@@ -338,7 +338,7 @@ XMPPUtils_test.o: XMPPUtils_test.cc.o
 
 # target to build an object file
 XMPPUtils_test.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.o
 .PHONY : XMPPUtils_test.cc.o
 
 XMPPUtils_test.i: XMPPUtils_test.cc.i
@@ -347,7 +347,7 @@ XMPPUtils_test.i: XMPPUtils_test.cc.i
 
 # target to preprocess a source file
 XMPPUtils_test.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.i
 .PHONY : XMPPUtils_test.cc.i
 
 XMPPUtils_test.s: XMPPUtils_test.cc.s
@@ -356,7 +356,7 @@ XMPPUtils_test.s: XMPPUtils_test.cc.s
 
 # target to generate assembly for a file
 XMPPUtils_test.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPUtils_test.dir/build.make libextendxmpp/CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.s
 .PHONY : XMPPUtils_test.cc.s
 
 XMPPWorker.o: XMPPWorker.cc.o
@@ -365,7 +365,7 @@ XMPPWorker.o: XMPPWorker.cc.o
 
 # target to build an object file
 XMPPWorker.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o
 .PHONY : XMPPWorker.cc.o
 
 XMPPWorker.i: XMPPWorker.cc.i
@@ -374,7 +374,7 @@ XMPPWorker.i: XMPPWorker.cc.i
 
 # target to preprocess a source file
 XMPPWorker.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.i
 .PHONY : XMPPWorker.cc.i
 
 XMPPWorker.s: XMPPWorker.cc.s
@@ -383,7 +383,7 @@ XMPPWorker.s: XMPPWorker.cc.s
 
 # target to generate assembly for a file
 XMPPWorker.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/extendxmpp.dir/build.make libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.s
 .PHONY : XMPPWorker.cc.s
 
 XMPPWorker_test.o: XMPPWorker_test.cc.o
@@ -392,7 +392,7 @@ XMPPWorker_test.o: XMPPWorker_test.cc.o
 
 # target to build an object file
 XMPPWorker_test.cc.o:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/XMPPWorker_test.cc.o
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/XMPPWorker_test.cc.o
 .PHONY : XMPPWorker_test.cc.o
 
 XMPPWorker_test.i: XMPPWorker_test.cc.i
@@ -401,7 +401,7 @@ XMPPWorker_test.i: XMPPWorker_test.cc.i
 
 # target to preprocess a source file
 XMPPWorker_test.cc.i:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/XMPPWorker_test.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/XMPPWorker_test.cc.i
 .PHONY : XMPPWorker_test.cc.i
 
 XMPPWorker_test.s: XMPPWorker_test.cc.s
@@ -410,7 +410,7 @@ XMPPWorker_test.s: XMPPWorker_test.cc.s
 
 # target to generate assembly for a file
 XMPPWorker_test.cc.s:
-	cd /home/hessam/Desktop/IR/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/XMPPWorker_test.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(MAKE) -f libextendxmpp/CMakeFiles/XMPPWorker_test.dir/build.make libextendxmpp/CMakeFiles/XMPPWorker_test.dir/XMPPWorker_test.cc.s
 .PHONY : XMPPWorker_test.cc.s
 
 # Help Target
@@ -463,6 +463,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/hessam/Desktop/IR/IR/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

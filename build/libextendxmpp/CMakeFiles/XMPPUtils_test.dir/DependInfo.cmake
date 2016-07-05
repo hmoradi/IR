@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils_test.cc" "/home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.o"
+  "/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPUtils_test.cc" "/home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/XMPPUtils_test.dir/XMPPUtils_test.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -19,7 +19,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/DependInfo.cmake"
+  "/home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

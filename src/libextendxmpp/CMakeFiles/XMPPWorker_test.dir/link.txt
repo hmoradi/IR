@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/XMPPWorker_test.dir/XMPPWorker_test.cc.o  -o XMPPWorker_test -rdynamic libextendxmpp.a -lstrophe -lpthread 

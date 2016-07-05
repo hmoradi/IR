@@ -47,7 +47,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/blob.dir/DependInfo.cmake"
+  "CMakeFiles/HotSpotter.dir/DependInfo.cmake"
   "libextendxmpp/CMakeFiles/extendxmpp.dir/DependInfo.cmake"
   "libextendxmpp/CMakeFiles/XMPPWorker_test.dir/DependInfo.cmake"
   "libextendxmpp/CMakeFiles/XMPPUtils_test.dir/DependInfo.cmake"

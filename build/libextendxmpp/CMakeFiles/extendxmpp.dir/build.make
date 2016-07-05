@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/hessam/Desktop/IR/IR
+CMAKE_SOURCE_DIR = /home/hessam/Desktop/HotSpotter/IR
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/hessam/Desktop/IR/IR/build
+CMAKE_BINARY_DIR = /home/hessam/Desktop/HotSpotter/IR/build
 
 # Include any dependencies generated for this target.
 include libextendxmpp/CMakeFiles/extendxmpp.dir/depend.make
@@ -59,16 +59,16 @@ include libextendxmpp/CMakeFiles/extendxmpp.dir/flags.make
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o: libextendxmpp/CMakeFiles/extendxmpp.dir/flags.make
 libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o: ../libextendxmpp/Stanza.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/IR/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/Stanza.cc.o -c /home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o"
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/Stanza.cc.o -c /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.cc
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/extendxmpp.dir/Stanza.cc.i"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.cc > CMakeFiles/extendxmpp.dir/Stanza.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.cc > CMakeFiles/extendxmpp.dir/Stanza.cc.i
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/extendxmpp.dir/Stanza.cc.s"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.cc -o CMakeFiles/extendxmpp.dir/Stanza.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.cc -o CMakeFiles/extendxmpp.dir/Stanza.cc.s
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o.requires:
 
@@ -83,16 +83,16 @@ libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o.provides.build: libextendxmp
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o: libextendxmpp/CMakeFiles/extendxmpp.dir/flags.make
 libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o: ../libextendxmpp/StanzaQueue.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/IR/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o -c /home/hessam/Desktop/IR/IR/libextendxmpp/StanzaQueue.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o"
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o -c /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/StanzaQueue.cc
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/extendxmpp.dir/StanzaQueue.cc.i"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/IR/IR/libextendxmpp/StanzaQueue.cc > CMakeFiles/extendxmpp.dir/StanzaQueue.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/StanzaQueue.cc > CMakeFiles/extendxmpp.dir/StanzaQueue.cc.i
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/extendxmpp.dir/StanzaQueue.cc.s"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/IR/IR/libextendxmpp/StanzaQueue.cc -o CMakeFiles/extendxmpp.dir/StanzaQueue.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/StanzaQueue.cc -o CMakeFiles/extendxmpp.dir/StanzaQueue.cc.s
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o.requires:
 
@@ -107,16 +107,16 @@ libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o.provides.build: libexte
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o: libextendxmpp/CMakeFiles/extendxmpp.dir/flags.make
 libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o: ../libextendxmpp/Transaction.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/IR/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/Transaction.cc.o -c /home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o"
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/Transaction.cc.o -c /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.cc
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/extendxmpp.dir/Transaction.cc.i"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.cc > CMakeFiles/extendxmpp.dir/Transaction.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.cc > CMakeFiles/extendxmpp.dir/Transaction.cc.i
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/extendxmpp.dir/Transaction.cc.s"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.cc -o CMakeFiles/extendxmpp.dir/Transaction.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.cc -o CMakeFiles/extendxmpp.dir/Transaction.cc.s
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o.requires:
 
@@ -131,16 +131,16 @@ libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o.provides.build: libexte
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o: libextendxmpp/CMakeFiles/extendxmpp.dir/flags.make
 libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o: ../libextendxmpp/TransactionQueue.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/IR/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o -c /home/hessam/Desktop/IR/IR/libextendxmpp/TransactionQueue.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o"
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o -c /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/TransactionQueue.cc
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/extendxmpp.dir/TransactionQueue.cc.i"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/IR/IR/libextendxmpp/TransactionQueue.cc > CMakeFiles/extendxmpp.dir/TransactionQueue.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/TransactionQueue.cc > CMakeFiles/extendxmpp.dir/TransactionQueue.cc.i
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/extendxmpp.dir/TransactionQueue.cc.s"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/IR/IR/libextendxmpp/TransactionQueue.cc -o CMakeFiles/extendxmpp.dir/TransactionQueue.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/TransactionQueue.cc -o CMakeFiles/extendxmpp.dir/TransactionQueue.cc.s
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o.requires:
 
@@ -155,16 +155,16 @@ libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o.provides.build: li
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o: libextendxmpp/CMakeFiles/extendxmpp.dir/flags.make
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o: ../libextendxmpp/XMPPWorker.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/IR/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o -c /home/hessam/Desktop/IR/IR/libextendxmpp/XMPPWorker.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o"
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o -c /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPWorker.cc
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/extendxmpp.dir/XMPPWorker.cc.i"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/IR/IR/libextendxmpp/XMPPWorker.cc > CMakeFiles/extendxmpp.dir/XMPPWorker.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPWorker.cc > CMakeFiles/extendxmpp.dir/XMPPWorker.cc.i
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/extendxmpp.dir/XMPPWorker.cc.s"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/IR/IR/libextendxmpp/XMPPWorker.cc -o CMakeFiles/extendxmpp.dir/XMPPWorker.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPWorker.cc -o CMakeFiles/extendxmpp.dir/XMPPWorker.cc.s
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o.requires:
 
@@ -179,16 +179,16 @@ libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o.provides.build: libexten
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o: libextendxmpp/CMakeFiles/extendxmpp.dir/flags.make
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o: ../libextendxmpp/XMPPUtils.cc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/IR/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o -c /home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.cc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o"
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o -c /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPUtils.cc
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/extendxmpp.dir/XMPPUtils.cc.i"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.cc > CMakeFiles/extendxmpp.dir/XMPPUtils.cc.i
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPUtils.cc > CMakeFiles/extendxmpp.dir/XMPPUtils.cc.i
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/extendxmpp.dir/XMPPUtils.cc.s"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.cc -o CMakeFiles/extendxmpp.dir/XMPPUtils.cc.s
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPUtils.cc -o CMakeFiles/extendxmpp.dir/XMPPUtils.cc.s
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o.requires:
 
@@ -221,9 +221,9 @@ libextendxmpp/libextendxmpp.a: libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorke
 libextendxmpp/libextendxmpp.a: libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o
 libextendxmpp/libextendxmpp.a: libextendxmpp/CMakeFiles/extendxmpp.dir/build.make
 libextendxmpp/libextendxmpp.a: libextendxmpp/CMakeFiles/extendxmpp.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/hessam/Desktop/IR/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libextendxmpp.a"
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && $(CMAKE_COMMAND) -P CMakeFiles/extendxmpp.dir/cmake_clean_target.cmake
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/extendxmpp.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX static library libextendxmpp.a"
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && $(CMAKE_COMMAND) -P CMakeFiles/extendxmpp.dir/cmake_clean_target.cmake
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/extendxmpp.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 libextendxmpp/CMakeFiles/extendxmpp.dir/build: libextendxmpp/libextendxmpp.a
@@ -240,10 +240,10 @@ libextendxmpp/CMakeFiles/extendxmpp.dir/requires: libextendxmpp/CMakeFiles/exten
 .PHONY : libextendxmpp/CMakeFiles/extendxmpp.dir/requires
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/clean:
-	cd /home/hessam/Desktop/IR/IR/build/libextendxmpp && $(CMAKE_COMMAND) -P CMakeFiles/extendxmpp.dir/cmake_clean.cmake
+	cd /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp && $(CMAKE_COMMAND) -P CMakeFiles/extendxmpp.dir/cmake_clean.cmake
 .PHONY : libextendxmpp/CMakeFiles/extendxmpp.dir/clean
 
 libextendxmpp/CMakeFiles/extendxmpp.dir/depend:
-	cd /home/hessam/Desktop/IR/IR/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/hessam/Desktop/IR/IR /home/hessam/Desktop/IR/IR/libextendxmpp /home/hessam/Desktop/IR/IR/build /home/hessam/Desktop/IR/IR/build/libextendxmpp /home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/hessam/Desktop/HotSpotter/IR/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/hessam/Desktop/HotSpotter/IR /home/hessam/Desktop/HotSpotter/IR/libextendxmpp /home/hessam/Desktop/HotSpotter/IR/build /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp /home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : libextendxmpp/CMakeFiles/extendxmpp.dir/depend
 

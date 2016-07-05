@@ -1,4 +1,4 @@
-# Install script for directory: /home/hessam/Desktop/IR/IR/libextendxmpp
+# Install script for directory: /home/hessam/Desktop/HotSpotter/IR/libextendxmpp
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

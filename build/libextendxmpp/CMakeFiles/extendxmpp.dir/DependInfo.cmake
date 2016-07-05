@@ -4,12 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/hessam/Desktop/IR/IR/libextendxmpp/Stanza.cc" "/home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o"
-  "/home/hessam/Desktop/IR/IR/libextendxmpp/StanzaQueue.cc" "/home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o"
-  "/home/hessam/Desktop/IR/IR/libextendxmpp/Transaction.cc" "/home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o"
-  "/home/hessam/Desktop/IR/IR/libextendxmpp/TransactionQueue.cc" "/home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o"
-  "/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPUtils.cc" "/home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o"
-  "/home/hessam/Desktop/IR/IR/libextendxmpp/XMPPWorker.cc" "/home/hessam/Desktop/IR/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o"
+  "/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Stanza.cc" "/home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/Stanza.cc.o"
+  "/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/StanzaQueue.cc" "/home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/StanzaQueue.cc.o"
+  "/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/Transaction.cc" "/home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/Transaction.cc.o"
+  "/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/TransactionQueue.cc" "/home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/TransactionQueue.cc.o"
+  "/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPUtils.cc" "/home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPUtils.cc.o"
+  "/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/XMPPWorker.cc" "/home/hessam/Desktop/HotSpotter/IR/build/libextendxmpp/CMakeFiles/extendxmpp.dir/XMPPWorker.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

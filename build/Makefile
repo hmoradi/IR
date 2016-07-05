@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/hessam/Desktop/IR/IR
+CMAKE_SOURCE_DIR = /home/hessam/Desktop/HotSpotter/IR
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/hessam/Desktop/IR/IR/build
+CMAKE_BINARY_DIR = /home/hessam/Desktop/HotSpotter/IR/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/hessam/Desktop/IR/IR/build/CMakeFiles /home/hessam/Desktop/IR/IR/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles /home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/hessam/Desktop/IR/IR/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/hessam/Desktop/HotSpotter/IR/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named blob
+# Target rules for targets named HotSpotter
 
 # Build rule for target.
-blob: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 blob
-.PHONY : blob
+HotSpotter: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 HotSpotter
+.PHONY : HotSpotter
 
 # fast build rule for target.
-blob/fast:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/build
-.PHONY : blob/fast
+HotSpotter/fast:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/build
+.PHONY : HotSpotter/fast
 
 #=============================================================================
 # Target rules for targets named extendxmpp
@@ -175,13 +175,94 @@ TransactionQueue_test/fast:
 	$(MAKE) -f libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build.make libextendxmpp/CMakeFiles/TransactionQueue_test.dir/build
 .PHONY : TransactionQueue_test/fast
 
+src/GridEyeReader.o: src/GridEyeReader.cpp.o
+
+.PHONY : src/GridEyeReader.o
+
+# target to build an object file
+src/GridEyeReader.cpp.o:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/GridEyeReader.cpp.o
+.PHONY : src/GridEyeReader.cpp.o
+
+src/GridEyeReader.i: src/GridEyeReader.cpp.i
+
+.PHONY : src/GridEyeReader.i
+
+# target to preprocess a source file
+src/GridEyeReader.cpp.i:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/GridEyeReader.cpp.i
+.PHONY : src/GridEyeReader.cpp.i
+
+src/GridEyeReader.s: src/GridEyeReader.cpp.s
+
+.PHONY : src/GridEyeReader.s
+
+# target to generate assembly for a file
+src/GridEyeReader.cpp.s:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/GridEyeReader.cpp.s
+.PHONY : src/GridEyeReader.cpp.s
+
+src/HotSpotter.o: src/HotSpotter.cpp.o
+
+.PHONY : src/HotSpotter.o
+
+# target to build an object file
+src/HotSpotter.cpp.o:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/HotSpotter.cpp.o
+.PHONY : src/HotSpotter.cpp.o
+
+src/HotSpotter.i: src/HotSpotter.cpp.i
+
+.PHONY : src/HotSpotter.i
+
+# target to preprocess a source file
+src/HotSpotter.cpp.i:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/HotSpotter.cpp.i
+.PHONY : src/HotSpotter.cpp.i
+
+src/HotSpotter.s: src/HotSpotter.cpp.s
+
+.PHONY : src/HotSpotter.s
+
+# target to generate assembly for a file
+src/HotSpotter.cpp.s:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/HotSpotter.cpp.s
+.PHONY : src/HotSpotter.cpp.s
+
+src/OccupancyCounter.o: src/OccupancyCounter.cpp.o
+
+.PHONY : src/OccupancyCounter.o
+
+# target to build an object file
+src/OccupancyCounter.cpp.o:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/OccupancyCounter.cpp.o
+.PHONY : src/OccupancyCounter.cpp.o
+
+src/OccupancyCounter.i: src/OccupancyCounter.cpp.i
+
+.PHONY : src/OccupancyCounter.i
+
+# target to preprocess a source file
+src/OccupancyCounter.cpp.i:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/OccupancyCounter.cpp.i
+.PHONY : src/OccupancyCounter.cpp.i
+
+src/OccupancyCounter.s: src/OccupancyCounter.cpp.s
+
+.PHONY : src/OccupancyCounter.s
+
+# target to generate assembly for a file
+src/OccupancyCounter.cpp.s:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/OccupancyCounter.cpp.s
+.PHONY : src/OccupancyCounter.cpp.s
+
 src/XMPPInterface.o: src/XMPPInterface.cpp.o
 
 .PHONY : src/XMPPInterface.o
 
 # target to build an object file
 src/XMPPInterface.cpp.o:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/XMPPInterface.cpp.o
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/XMPPInterface.cpp.o
 .PHONY : src/XMPPInterface.cpp.o
 
 src/XMPPInterface.i: src/XMPPInterface.cpp.i
@@ -190,7 +271,7 @@ src/XMPPInterface.i: src/XMPPInterface.cpp.i
 
 # target to preprocess a source file
 src/XMPPInterface.cpp.i:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/XMPPInterface.cpp.i
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/XMPPInterface.cpp.i
 .PHONY : src/XMPPInterface.cpp.i
 
 src/XMPPInterface.s: src/XMPPInterface.cpp.s
@@ -199,35 +280,35 @@ src/XMPPInterface.s: src/XMPPInterface.cpp.s
 
 # target to generate assembly for a file
 src/XMPPInterface.cpp.s:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/XMPPInterface.cpp.s
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/XMPPInterface.cpp.s
 .PHONY : src/XMPPInterface.cpp.s
 
-src/blob.o: src/blob.cpp.o
+src/XMPPWrapper.o: src/XMPPWrapper.cpp.o
 
-.PHONY : src/blob.o
+.PHONY : src/XMPPWrapper.o
 
 # target to build an object file
-src/blob.cpp.o:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/blob.cpp.o
-.PHONY : src/blob.cpp.o
+src/XMPPWrapper.cpp.o:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/XMPPWrapper.cpp.o
+.PHONY : src/XMPPWrapper.cpp.o
 
-src/blob.i: src/blob.cpp.i
+src/XMPPWrapper.i: src/XMPPWrapper.cpp.i
 
-.PHONY : src/blob.i
+.PHONY : src/XMPPWrapper.i
 
 # target to preprocess a source file
-src/blob.cpp.i:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/blob.cpp.i
-.PHONY : src/blob.cpp.i
+src/XMPPWrapper.cpp.i:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/XMPPWrapper.cpp.i
+.PHONY : src/XMPPWrapper.cpp.i
 
-src/blob.s: src/blob.cpp.s
+src/XMPPWrapper.s: src/XMPPWrapper.cpp.s
 
-.PHONY : src/blob.s
+.PHONY : src/XMPPWrapper.s
 
 # target to generate assembly for a file
-src/blob.cpp.s:
-	$(MAKE) -f CMakeFiles/blob.dir/build.make CMakeFiles/blob.dir/src/blob.cpp.s
-.PHONY : src/blob.cpp.s
+src/XMPPWrapper.cpp.s:
+	$(MAKE) -f CMakeFiles/HotSpotter.dir/build.make CMakeFiles/HotSpotter.dir/src/XMPPWrapper.cpp.s
+.PHONY : src/XMPPWrapper.cpp.s
 
 # Help Target
 help:
@@ -237,17 +318,26 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... blob"
+	@echo "... HotSpotter"
 	@echo "... extendxmpp"
 	@echo "... XMPPWorker_test"
 	@echo "... XMPPUtils_test"
 	@echo "... TransactionQueue_test"
+	@echo "... src/GridEyeReader.o"
+	@echo "... src/GridEyeReader.i"
+	@echo "... src/GridEyeReader.s"
+	@echo "... src/HotSpotter.o"
+	@echo "... src/HotSpotter.i"
+	@echo "... src/HotSpotter.s"
+	@echo "... src/OccupancyCounter.o"
+	@echo "... src/OccupancyCounter.i"
+	@echo "... src/OccupancyCounter.s"
 	@echo "... src/XMPPInterface.o"
 	@echo "... src/XMPPInterface.i"
 	@echo "... src/XMPPInterface.s"
-	@echo "... src/blob.o"
-	@echo "... src/blob.i"
-	@echo "... src/blob.s"
+	@echo "... src/XMPPWrapper.o"
+	@echo "... src/XMPPWrapper.i"
+	@echo "... src/XMPPWrapper.s"
 .PHONY : help
 
 

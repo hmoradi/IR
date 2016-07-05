@@ -6,5 +6,5 @@ CXX_FLAGS =   -static
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/hessam/Desktop/IR/IR/src -I/home/hessam/Desktop/IR/IR -I/home/hessam/Desktop/IR/IR/build -I/usr/include/opencv -I/home/hessam/Desktop/IR/IR/libextendxmpp/. 
+CXX_INCLUDES = -I/home/hessam/Desktop/HotSpotter/IR/src -I/home/hessam/Desktop/HotSpotter/IR -I/home/hessam/Desktop/HotSpotter/IR/build -I/usr/include/opencv -I/home/hessam/Desktop/HotSpotter/IR/libextendxmpp/. 
 

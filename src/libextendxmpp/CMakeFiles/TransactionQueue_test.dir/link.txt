@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/TransactionQueue_test.dir/TransactionQueue_test.cc.o  -o TransactionQueue_test -rdynamic libextendxmpp.a -lstrophe -lpthread 
