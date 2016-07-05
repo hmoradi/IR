@@ -22,13 +22,13 @@
 #define START_FRAME 1
 #define END_FRAME 999
 //Live Stream
-#define LIVE false
+#define LIVE true
 #define PacketLength 134
 //GUI Settings
 #define colorMap true
 #define scaleImage true  // scale image to focus on colors
 #define showImage true //show all the frames
-#define WAIT_TIME 100
+#define WAIT_TIME 1
 //OpenCV Blob Detection Parameteres 
 #define blobDetection false
 #define blobMinThreshold 12

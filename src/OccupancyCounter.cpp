@@ -540,6 +540,7 @@ void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,V
         }
     }
     update_people_status(people,frameN);
-    //show_image(org_im,outputVideo);
+    //cout << "process framee " << frameN << endl;
+    show_image(org_im,outputVideo);
     //pause();
 }

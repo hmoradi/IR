@@ -29,12 +29,12 @@ using namespace cv;
 
 GridEyeReader::GridEyeReader(){
 
-    this-> f = 0;
-    this-> i = 0;
-    this-> vid = 0x403;
-    this-> pid = 0x6015;
-    this-> baudrate = 115200;
-    this-> interface = INTERFACE_A; //INTERFACE_ANY;
+     f = 0;
+     i = 0;
+     vid = 0x403;
+     pid = 0x6015;
+     baudrate = 115200;
+     interface = INTERFACE_A; //INTERFACE_ANY;
     Init();
     //this-> retval = EXIT_FAILURE;
 }
@@ -149,18 +149,18 @@ int** GridEyeReader::read_frame(std::ifstream* infile){
 
 int GridEyeReader::Init(){
 	// Init
-    if ((this->ftdi = ftdi_new()) == 0)
+    if ((ftdi = ftdi_new()) == 0)
     {
         fprintf(stderr, "ftdi_new failed\n");
         return EXIT_FAILURE;
     }
     fprintf(stderr,"Selecting interface.\n");
     // Select interface
-    int debug_res = ftdi_set_interface(this->ftdi, INTERFACE_A);
+    int debug_res = ftdi_set_interface(ftdi, INTERFACE_A);
        
     // Open device 
-    this->f = ftdi_usb_open(this->ftdi, this->vid, this->pid);
-    if (this->f < 0)
+    f = ftdi_usb_open(ftdi, this->vid, this->pid);
+    if (f < 0)
     {
         fprintf(stderr, "unable to open ftdi device: %d (%s)\n", this->f, ftdi_get_error_string(this->ftdi));
         exit(-1);
@@ -168,27 +168,27 @@ int GridEyeReader::Init(){
     fprintf(stderr,"FTDI device is open now.\n");
 	fprintf(stderr,"Setting up baudrate.\n");
     // Set baudrate
-    this->f = ftdi_set_baudrate(this->ftdi, this->baudrate);
-    if (this->f < 0)
+    f = ftdi_set_baudrate(this->ftdi, this->baudrate);
+    if (f < 0)
     {
-        fprintf(stderr, "unable to set baudrate: %d (%s)\n", this->f, ftdi_get_error_string(this->ftdi));
+        fprintf(stderr, "unable to set baudrate: %d (%s)\n", f, ftdi_get_error_string(ftdi));
         exit(-1);
     }
-    fprintf(stderr,"Baudrate (%d) set up done.\n",this->baudrate);
+    fprintf(stderr,"Baudrate (%d) set up done.\n",baudrate);
 }
     
 int GridEyeReader::ReadFrame(unsigned char* buf){
 	unsigned char buf2[1];
     buf2[0] = '*';
-    this->f = ftdi_write_data(this->ftdi, buf2, 1); //Ask PIC24F04KA200 microcontroller to start sending data
+    f = ftdi_write_data(ftdi, buf2, 1); //Ask PIC24F04KA200 microcontroller to start sending data
     memset(buf, 0, sizeof buf);
-    //usleep(1 * 500);
-   	f = ftdi_read_data(this->ftdi, buf, sizeof(buf));
+    usleep(1 * 500);
+   	f = ftdi_read_data(ftdi, buf, 1024);
     if (f<0){
         fprintf(stderr, "Something is wrong. %d bytes read\n",f);
         usleep(1 * 1000000);
     }
-    return this->f;
+    return f;
 }
 GridEyeReader::~GridEyeReader(){
     if(!LIVE)
