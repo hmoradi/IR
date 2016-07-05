@@ -35,6 +35,7 @@ GridEyeReader::GridEyeReader(){
     this-> pid = 0x6015;
     this-> baudrate = 115200;
     this-> interface = INTERFACE_A; //INTERFACE_ANY;
+    Init();
     //this-> retval = EXIT_FAILURE;
 }
 int GridEyeReader::find_packet_head(unsigned char *buf, int index, int len){
