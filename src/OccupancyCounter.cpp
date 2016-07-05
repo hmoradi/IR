@@ -71,6 +71,7 @@ Mat OccupancyCounter::resize_frame(Mat im, int frameN){
 void OccupancyCounter::show_image(Mat im,VideoWriter outputVideo){
    
    frameN ++;
+   
    if(!showImage)
        return;
    Mat im_color;
@@ -91,6 +92,8 @@ void OccupancyCounter::show_image(Mat im,VideoWriter outputVideo){
 
         if(SAVE_VIDEO)
             outputVideo.write(display);
+        //if(frameN == 180)
+        //   imwrite( "145large.jpg", display);
         imshow("key points- scaled",display);
         
    }else{
@@ -113,6 +116,8 @@ void OccupancyCounter::show_scaled (Mat im){
     convertScaleAbs(scaled,scaled_image,255 / 26);
     applyColorMap(scaled_image,im_color,COLORMAP_JET);
     flip(im_color,display,0);
+    //if(frameN == 180)
+     //   imwrite( "145small.jpg", display);
     namedWindow("raw input",CV_WINDOW_AUTOSIZE);
     imshow("raw input",display);
 }
@@ -514,6 +519,7 @@ void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,V
     map<string,Body> body_map;
     //cout <<"max diff is " << max - min << endl;
     if(max - min >=MIN_DIFF_IN_FRAME){
+        //cout <<"max diff is " << max - min << endl;
         map<int,vector<Rect>> contour_map = counter_map_extract(im);
         map<int,vector<Rect>> layerd_countors;
         vector<string> taken;
@@ -542,5 +548,6 @@ void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,V
     update_people_status(people,frameN);
     //cout << "process framee " << frameN << endl;
     show_image(org_im,outputVideo);
+
     //pause();
 }

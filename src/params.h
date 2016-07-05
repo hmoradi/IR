@@ -13,14 +13,14 @@
 #define enable_publishing_indicator_count true
 #define ENABLE_ACTUATION false
 #define reset_count_at_midnight true
-#define ENABLE_XMPP_REPORTING false
+#define ENABLE_XMPP_REPORTING true
 #define MIN_DIFF_IN_FRAME 10
 //Debug Configuration
 #define PRINT_FRAME false
 //Offline stream
-#define input_file_name "../data/exp1.txt"
+#define input_file_name "../data/exp5.txt"
 #define START_FRAME 1
-#define END_FRAME 999
+#define END_FRAME 1200
 //Live Stream
 #define LIVE true
 #define PacketLength 134

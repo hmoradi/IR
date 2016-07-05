@@ -66,6 +66,7 @@ public:
 	void process_frame(Mat im, int frameN,vector<Person>& people,VideoWriter outputVideo);
 	Mat convert_to_Mat(int** frame);
 	Mat resize_frame(Mat im, int frameN);
+	void show_scaled (Mat im);
 	void blob_detect(Mat im);
 	//virtual ~OccupancyCounter();
 
@@ -79,7 +80,7 @@ private:
 	
 	
 	void show_image(Mat im,VideoWriter outputVideo);
-	void show_scaled (Mat im);
+	
 	
 	void find_body(Rect candidate_rect, 
 		map<int,vector<Rect>> contour_map, int thresh ,map<string,Body>& body_map,set<ID_Rect> parents,vector<string>& taken);

@@ -13,6 +13,7 @@ public:
 	int ReadFrame(unsigned char* buf);
 	int** read_frame(std::ifstream* infile);
 	map<int,int**> interpret_data(unsigned char *buf, int len);
+	int Init();
 	virtual ~GridEyeReader();
 
 private:
@@ -32,7 +33,7 @@ private:
 	void array_copy(unsigned char* dest, unsigned char* source,int start_index, int len);
 	void add_to_residue(unsigned char* buf, int index);
 	int** print_packet(unsigned char* buf,int index);
-	int Init();
+	
 };
 
 #endif /* GRIDEYEREADER_H_ */

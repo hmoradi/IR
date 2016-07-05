@@ -23,21 +23,15 @@
 using namespace cv;
 using namespace std;
 
-
 static int exitRequested = 0;
 static int frameNumber = 0;
 static int frameN = 0;
 static int people_inside = 0;
 int retval ;
-
-
 int person_count_last = people_inside;
 GridEyeReader sensorReader;
-//XMPPWrapper XMPPWrapper_;
+XMPPWrapper XMPPWrapper_;
 OccupancyCounter OccupancyCounter_;
-
-
-
 /*
 *    SIGINT handler, so we can gracefully exit when the user hits ctrl-C.
 */
@@ -64,6 +58,7 @@ void read_from_file(string file_name,VideoWriter outputVideo){
     auto begin = chrono::high_resolution_clock::now();    
     while(true){
     	frameN++;
+        
         auto end = chrono::high_resolution_clock::now();
         auto dur = end - begin;
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
@@ -79,12 +74,13 @@ void read_from_file(string file_name,VideoWriter outputVideo){
     	else if (frameN > END_FRAME)
     		return;
     	Mat im = OccupancyCounter_.convert_to_Mat(frame);
+        
     	Mat extended_im = OccupancyCounter_.resize_frame(im,frameN);
     	if(blobDetection)
     		OccupancyCounter_.blob_detect(extended_im);
     	if(contourDetection)
     		OccupancyCounter_.process_frame(extended_im,frameN,people,outputVideo);
-    	//show_scaled(im);
+    	//OccupancyCounter_.show_scaled(im);
        	if(ENABLE_XMPP_REPORTING){
        		if(people_inside != person_count_last){
        			cout << "sending info " << people_inside << person_count_last << endl;
@@ -95,12 +91,12 @@ void read_from_file(string file_name,VideoWriter outputVideo){
     }
 }
 void update_people_count_handler(int param){
-	//if(ENABLE_XMPP_REPORTING)
-     //   XMPPWrapper_.update_people_count(param,people_inside);
+	if(ENABLE_XMPP_REPORTING)
+       XMPPWrapper_.update_people_count(param,people_inside);
 }
 void reset_occupancy_count(unsigned int initial_wait_time, atomic<bool>& timer_keeps_running){
-	// /if(ENABLE_XMPP_REPORTING)
-        //XMPPWrapper_.reset_occupancy_count(initial_wait_time, timer_keeps_running,people_inside);
+	if(ENABLE_XMPP_REPORTING)
+        XMPPWrapper_.reset_occupancy_count(initial_wait_time, timer_keeps_running,people_inside);
 }
 int compute_remaining_time_of_today(){
 
@@ -140,7 +136,7 @@ int main(int argc, char **argv){
 		thread( reset_occupancy_count, initial_wait_time, std::ref(timer_keeps_running) ).detach() ; 
 	}
 	
-	//XMPPWrapper_.report_updated_people_count(-200, people_inside, people_inside - person_count_last); //logging + reporting initial count
+	XMPPWrapper_.report_updated_people_count(-200, people_inside, people_inside - person_count_last); //logging + reporting initial count
     if(ENABLE_ACTUATION)
     {
     	signal(SIGUSR1, update_people_count_handler);
@@ -155,24 +151,24 @@ int main(int argc, char **argv){
  	map<int,int**> frames;
     print_time();
     vector<Person> people;
+    sensorReader.Init();
     auto begin = chrono::high_resolution_clock::now();    
     while (!exitRequested)
     {
     	auto end = chrono::high_resolution_clock::now();
         auto dur = end - begin;
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
-        cout << "ms passed is " << ms << endl;
-        usleep(std::max(0,(int)(100 - ms)) * 1000);
+        //cout << "ms passed is " << ms << endl;
+        //usleep(std::max(0,(int)(100 - ms)) * 1000);
+        if(ms > 100)
+            cout << "time passed " << ms << endl;
         int f = sensorReader.ReadFrame(buffer);
         //cout << "sensere reader returns " << f <<"bytes" << endl;
         begin = chrono::high_resolution_clock::now();
-        if (f<0){
-            cout << "Something is wrong." <<f <<" bytes read" <<endl;
-            usleep(1 * 1000000);
-        }
-        else if( f > 130 )
-        {
-            //cout << "precess frame " << frameN << endl;
+       if( f > 130 )
+       {
+            
+            //cout << "sensor reads  " << f << "bytes "<<endl;
             frames = sensorReader.interpret_data(buffer, f);
             for(map<int,int**>::iterator it=frames.begin();it!=frames.end();it++){
 				Mat im = OccupancyCounter_.convert_to_Mat(it->second);
@@ -184,8 +180,9 @@ int main(int argc, char **argv){
             }
             frames.clear();
         }
-        //if(ENABLE_XMPP_REPORTING)
-		           // XMPPWrapper_.occupancyChange(people_inside, people_inside - person_count_last);
+        if(ENABLE_XMPP_REPORTING)
+            if(people_inside != person_count_last)
+		      XMPPWrapper_.occupancyChange(people_inside, people_inside - person_count_last);
 		person_count_last = people_inside;
     }
     signal(SIGINT, SIG_DFL);
