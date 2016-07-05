@@ -153,6 +153,8 @@ int main(int argc, char **argv){
     vector<Person> people;
     sensorReader.Init();
     auto begin = chrono::high_resolution_clock::now();    
+    OccupancyCounter_.set_people_inside(0);
+    person_count_last = 0;
     while (!exitRequested)
     {
     	auto end = chrono::high_resolution_clock::now();
@@ -180,6 +182,7 @@ int main(int argc, char **argv){
             }
             frames.clear();
         }
+        people_inside = OccupancyCounter_.get_people_inside();
         if(ENABLE_XMPP_REPORTING)
             if(people_inside != person_count_last)
 		      XMPPWrapper_.occupancyChange(people_inside, people_inside - person_count_last);
