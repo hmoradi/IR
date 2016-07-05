@@ -18,21 +18,17 @@
 //Debug Configuration
 #define PRINT_FRAME false
 //Offline stream
-<<<<<<< HEAD
 #define input_file_name "../data/exp5.txt"
-=======
-#define input_file_name "../data/d150.txt"
->>>>>>> 4b6c7f33ae6c87453f0641f7af3ba8cc1f581446
 #define START_FRAME 1
 #define END_FRAME 1200
 //Live Stream
-#define LIVE false
+#define LIVE true
 #define PacketLength 134
 //GUI Settings
 #define colorMap true
 #define scaleImage true  // scale image to focus on colors
 #define showImage false //show all the frames
-#define WAIT_TIME 1
+#define WAIT_TIME 100
 //OpenCV Blob Detection Parameteres 
 #define blobDetection false
 #define blobMinThreshold 12
