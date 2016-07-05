@@ -512,6 +512,7 @@ void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,V
     double min,max;
     minMaxIdx(im,&min,&max);
     map<string,Body> body_map;
+    //cout <<"max diff is " << max - min << endl;
     if(max - min >=MIN_DIFF_IN_FRAME){
         map<int,vector<Rect>> contour_map = counter_map_extract(im);
         map<int,vector<Rect>> layerd_countors;
@@ -539,6 +540,6 @@ void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,V
         }
     }
     update_people_status(people,frameN);
-    show_image(org_im,outputVideo);
+    //show_image(org_im,outputVideo);
     //pause();
 }

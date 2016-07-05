@@ -14,7 +14,7 @@
 #define ENABLE_ACTUATION false
 #define reset_count_at_midnight true
 #define ENABLE_XMPP_REPORTING false
-#define MIN_DIFF_IN_FRAME 5
+#define MIN_DIFF_IN_FRAME 10
 //Debug Configuration
 #define PRINT_FRAME false
 //Offline stream

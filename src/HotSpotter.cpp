@@ -61,10 +61,15 @@ void read_from_file(string file_name,VideoWriter outputVideo){
     int** frame = NULL;
     int frameN = 0;
     vector<Person> people;
+    auto begin = chrono::high_resolution_clock::now();    
     while(true){
     	frameN++;
-
+        auto end = chrono::high_resolution_clock::now();
+        auto dur = end - begin;
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+        cout << "ms passed is " << ms << endl;
     	frame = sensorReader.read_frame(&infile);
+        begin = chrono::high_resolution_clock::now();
     	if (frame == NULL){
     		cout << "Something is wrong with input file " << input_file_name << endl;
     		return;
@@ -148,9 +153,15 @@ int main(int argc, char **argv){
  	map<int,int**> frames;
     print_time();
     vector<Person> people;
+    auto begin = chrono::high_resolution_clock::now();    
     while (!exitRequested)
     {
-    	int f = sensorReader.ReadFrame(buf);
+    	auto end = chrono::high_resolution_clock::now();
+        auto dur = end - begin;
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+        cout << "ms passed is " << ms << endl;
+        int f = sensorReader.ReadFrame(buf);
+        begin = chrono::high_resolution_clock::now();
         if (f<0){
             fprintf(stderr, "Something is wrong. %d bytes read\n",f);
             usleep(1 * 1000000);
