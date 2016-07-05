@@ -184,6 +184,7 @@ int GridEyeReader::ReadFrame(unsigned char* buf){
     memset(buf, 0, sizeof buf);
     //usleep(1 * 500);
    	f = ftdi_read_data(ftdi, buf, 1024);
+    cout << "read form sensor " << f << endl;
     if (f<0){
         fprintf(stderr, "Something is wrong. %d bytes read\n",f);
         usleep(1 * 1000000);

@@ -84,7 +84,7 @@ void read_from_file(string file_name,VideoWriter outputVideo){
        	if(ENABLE_XMPP_REPORTING){
        		if(people_inside != person_count_last){
        			cout << "sending info " << people_inside << person_count_last << endl;
-		    	//XMPPWrapper_.occupancyChange(people_inside, people_inside - person_count_last);
+		    	XMPPWrapper_.occupancyChange(people_inside, people_inside - person_count_last);
 		    }
 		}
 		person_count_last = people_inside;
@@ -158,6 +158,7 @@ int main(int argc, char **argv){
     	auto end = chrono::high_resolution_clock::now();
         auto dur = end - begin;
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(dur).count();
+<<<<<<< HEAD
         //cout << "ms passed is " << ms << endl;
         //usleep(std::max(0,(int)(100 - ms)) * 1000);
         if(ms > 100)
@@ -169,8 +170,26 @@ int main(int argc, char **argv){
        {
             
             //cout << "sensor reads  " << f << "bytes "<<endl;
+=======
+        if(ms > 100){
+			cout << "ms passed is " << ms <<"at frame "<<frameN<< endl;
+		}else{
+			//usleep(std::max(0,(int)(100 - ms)) * 1000);
+		}
+        int f = sensorReader.ReadFrame(buffer);
+        //cout << "sensere reader returns " << f <<"bytes" << endl;
+        begin = chrono::high_resolution_clock::now();
+        if (f<0){
+            cout << "Something is wrong." <<f <<" bytes read" <<endl;
+            usleep(1 * 1000000);
+        }
+        else if( f > 130 )
+        {
+            cout << "read from sensor " << f << endl;
+>>>>>>> 4b6c7f33ae6c87453f0641f7af3ba8cc1f581446
             frames = sensorReader.interpret_data(buffer, f);
             for(map<int,int**>::iterator it=frames.begin();it!=frames.end();it++){
+				frameN++;
 				Mat im = OccupancyCounter_.convert_to_Mat(it->second);
 				Mat extended_im = OccupancyCounter_.resize_frame(im,it->first);
 				if(blobDetection)
