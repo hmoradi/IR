@@ -79,8 +79,8 @@ void read_from_file(string file_name,VideoWriter outputVideo){
     	if(blobDetection)
     		OccupancyCounter_.blob_detect(extended_im);
     	if(contourDetection)
-    		OccupancyCounter_.process_frame(extended_im,frameN,people,outputVideo);
-    	//OccupancyCounter_.show_scaled(im);
+    		OccupancyCounter_.process_frame(extended_im,frameN,people,outputVideo,im);
+    	//OccupancyCounter_.show_scaled(im,extended_im,outputVideo);
        	if(ENABLE_XMPP_REPORTING){
        		if(people_inside != person_count_last){
        			cout << "sending info " << people_inside << person_count_last << endl;
@@ -121,7 +121,7 @@ int compute_remaining_time_of_today(){
 }
 int main(int argc, char **argv){
 	VideoWriter outputVideo;
-	Size S = Size(extended_resolution,extended_resolution);
+	Size S = Size(2*extended_resolution,extended_resolution);
 	outputVideo.open("test.avi",  CV_FOURCC('M','J','P','G'), 10, S, true);
     if (!outputVideo.isOpened())
     {
@@ -169,7 +169,6 @@ int main(int argc, char **argv){
         begin = chrono::high_resolution_clock::now();
        if( f > 130 )
        {
-            
             //cout << "sensor reads  " << f << "bytes "<<endl;
             frames = sensorReader.interpret_data(buffer, f);
             for(map<int,int**>::iterator it=frames.begin();it!=frames.end();it++){
@@ -178,7 +177,7 @@ int main(int argc, char **argv){
 				if(blobDetection)
 					OccupancyCounter_.blob_detect(extended_im);
 				if(contourDetection)
-					OccupancyCounter_.process_frame(extended_im,it->first,people,outputVideo);
+					OccupancyCounter_.process_frame(extended_im,it->first,people,outputVideo,im);
             }
             frames.clear();
         }

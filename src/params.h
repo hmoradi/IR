@@ -9,7 +9,7 @@
 #define BODY_THRESHOLD 0.5
 #define TRAJECTORY_LENGTH 4
 #define DETECTION_DELAY 5
-#define SAVE_VIDEO false
+#define SAVE_VIDEO true
 #define enable_publishing_indicator_count true
 #define ENABLE_ACTUATION false
 #define reset_count_at_midnight true
@@ -20,9 +20,9 @@
 //Offline stream
 #define input_file_name "../data/exp5.txt"
 #define START_FRAME 1
-#define END_FRAME 1200
+#define END_FRAME 1000
 //Live Stream
-#define LIVE true
+#define LIVE false
 #define PacketLength 134
 //GUI Settings
 #define colorMap true

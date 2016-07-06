@@ -63,10 +63,10 @@ public:
 	void set_people_inside(int people_inside);
 	int get_people_inside();
 	
-	void process_frame(Mat im, int frameN,vector<Person>& people,VideoWriter outputVideo);
+	void process_frame(Mat im, int frameN,vector<Person>& people,VideoWriter outputVideo, Mat raw_im);
 	Mat convert_to_Mat(int** frame);
 	Mat resize_frame(Mat im, int frameN);
-	void show_scaled (Mat im);
+	void show_scaled (Mat im,Mat im2, VideoWriter outputVideo);
 	void blob_detect(Mat im);
 	//virtual ~OccupancyCounter();
 

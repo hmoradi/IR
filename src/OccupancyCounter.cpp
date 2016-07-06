@@ -90,8 +90,8 @@ void OccupancyCounter::show_image(Mat im,VideoWriter outputVideo){
         putText(display, to_string(frameN)+":"+to_string(people_inside), textOrg, fontFace,fontScale,Scalar::all(40),thickness,8  );
         namedWindow("key points- scaled",CV_WINDOW_AUTOSIZE);
 
-        if(SAVE_VIDEO)
-            outputVideo.write(display);
+        //if(SAVE_VIDEO)
+           // outputVideo.write(display);
         //if(frameN == 180)
         //   imwrite( "145large.jpg", display);
         imshow("key points- scaled",display);
@@ -103,23 +103,35 @@ void OccupancyCounter::show_image(Mat im,VideoWriter outputVideo){
    }
    waitKey(WAIT_TIME);
 }
-void OccupancyCounter::show_scaled (Mat im){
-    Mat scaled= Mat::zeros(256,256,CV_8UC1);
-    for(int i=0;i<256;i++){
-        for(int j=0;j<256;j++){
-            scaled.at<uchar>(i,j)=im.at<uchar>(i/32,j/32);
+void OccupancyCounter::show_scaled (Mat im,Mat im2, VideoWriter outputVideo){
+    Mat scaled= Mat::zeros(extended_resolution,extended_resolution,CV_8UC1);
+    int scale = extended_resolution / 8 ;
+    for(int i=0;i<extended_resolution;i++){
+        for(int j=0;j<extended_resolution;j++){
+            scaled.at<uchar>(i,j)=im.at<uchar>(i/scale,j/scale);
         }
     }
     Mat scaled_image;
     Mat im_color;
-    Mat display;
+    Mat display1;
     convertScaleAbs(scaled,scaled_image,255 / 26);
     applyColorMap(scaled_image,im_color,COLORMAP_JET);
-    flip(im_color,display,0);
+    flip(im_color,display1,0);
     //if(frameN == 180)
      //   imwrite( "145small.jpg", display);
-    namedWindow("raw input",CV_WINDOW_AUTOSIZE);
-    imshow("raw input",display);
+    Mat scaled_im2;
+    convertScaleAbs(im2,scaled_im2,255 / 26);
+    Mat im_color2;
+    applyColorMap(scaled_im2,im_color2,COLORMAP_JET);
+    Mat display2;
+    flip(im_color2,display2,0);
+    //namedWindow("raw input",CV_WINDOW_AUTOSIZE);
+    Mat Hmat;
+    hconcat(display1, display2,Hmat);
+    if(SAVE_VIDEO)
+        outputVideo.write(Hmat);
+    imshow("raw input",Hmat);
+    waitKey(100);
 }
 float OccupancyCounter::calc_match_weight (Person person_ , Body body){
     map<int,Body>::reverse_iterator last_location = person_.trajectory.rbegin();
@@ -509,7 +521,7 @@ map<int,vector<Rect>> OccupancyCounter::counter_map_extract(Mat im){
     }
     return contour_map;
 }
-void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,VideoWriter outputVideo){
+void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,VideoWriter outputVideo , Mat raw_im){
     Mat org_im;
     vector<Rect> root_rects;
     org_im = im.clone();
@@ -548,6 +560,7 @@ void OccupancyCounter::process_frame(Mat im, int frameN,vector<Person>& people,V
     update_people_status(people,frameN);
     //cout << "process framee " << frameN << endl;
     show_image(org_im,outputVideo);
-
+    if(SAVE_VIDEO)
+        show_scaled(raw_im,org_im,outputVideo);
     //pause();
 }
