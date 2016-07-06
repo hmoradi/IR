@@ -76,42 +76,49 @@ void GridEyeReader::add_to_residue(unsigned char* buf, int index){
 }
 //Prints content of serial packet received from FTDI module
 int** GridEyeReader::print_packet(unsigned char* buf,int index){
-    frameNumber++;
-    //cout << "reader reads frame "<<frameNumber << endl;
+    
+    
 	int** frame = new int*[8];
     for (int i=0;i<8;i++)
-        frame[i] = new int[8];
-	//long int epoch= print_time();    
-    int thermistor_data = ((int)buf[index + 4]<<8) | buf[index +3]; //Next 2 characters [index: 3, 4] are thermistor bytes	
+        frame[i] = new int[8];    
+    //int thermistor_data = ((int)buf[index + 4]<<8) | buf[index +3]; //Next 2 characters [index: 3, 4] are thermistor bytes	
     int k = index + 5; 
-    for(int i = 0; i < 8; i++) {
-        for(int j = 0; j < 8; j++) {
-            int high_byte = buf[k+1];
-            unsigned char low_byte = buf[k];
-            int temperature_reading = (high_byte << 8) | low_byte;
-            //IR_array_data[i][j] = temperature_reading;
-            frame[i][j] = min(max( temperature_reading / 4 , 0),40);
-             
+    int high_byte;
+    int temperature;
+    unsigned char low_byte;
+    int i,j;
+    for( i = 0; i < 8; i++) {
+        for( j = 0; j < 8; j++) {
+            high_byte = buf[k+1];
+            low_byte = buf[k];
+            temperature = (high_byte << 8) | low_byte;
+            temperature = temperature / 4;
+            frame[i][j] = min(max(temperature,15),40);
             k+=2;
         }
-    }   
-    return frame;
+    }
+	if (i ==8 and j == 8){
+		frameNumber++;
+		return frame;
+	}
+	return NULL;
 }
 
 map<int,int**> GridEyeReader::interpret_data(unsigned char *buf, int len){
 	int** frame;
 	map<int,int**> frames;
 	int index = find_packet_head(buf,0,len);
-	//cout << "1 " << index << endl;
 	if(index != 0){
         add_to_residue(buf,index);
         frame = print_packet(residue,0);
-        frames[frameNumber] = frame;
+        if(frame != NULL)
+			frames[frameNumber] = frame;
         memset(residue,0,sizeof residue);
     }else{
         if(residue[0] != 0){
            frame = print_packet(residue,0);
-           frames[frameNumber] = frame;
+           if(frame != NULL)
+				frames[frameNumber] = frame;
            memset(residue,0,sizeof residue);
         }
     }
@@ -121,16 +128,14 @@ map<int,int**> GridEyeReader::interpret_data(unsigned char *buf, int len){
             return frames;
         }
         frame = print_packet(buf,index);
-        frames[frameNumber] = frame;
+        if(frame != NULL)
+			frames[frameNumber] = frame;
         index+= PacketLength;
-        index = find_packet_head(buf,index,len);
-        //cout << "2 " << index << endl; 
+        index = find_packet_head(buf,index,len); 
     }
     return frames;	
 }
 int** GridEyeReader::read_frame(std::ifstream* infile){
-    //if(!this->infile.is_open())
-    //    this->infile("../data/d150_1.txt");
     int** frame = new int*[8];
     for (int i=0;i<8;i++)
         frame[i] = new int[8];
@@ -139,6 +144,8 @@ int** GridEyeReader::read_frame(std::ifstream* infile){
     
     while(*infile >> epoch >> frameN >> Ta >> frame[index][0] >> frame[index][1] >> frame[index][2] >> frame[index][3] >> frame[index][4] >> frame[index][5] >> frame[index][6] >> frame[index][7]){
     	
+    	for(int j=0;j<8;j++)
+			frame[index][j] = min(max(frame[index][j],14),40);
     	index ++;
     	if (index >=8){
     		return frame;
