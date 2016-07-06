@@ -19,5 +19,10 @@ include_directories(BEFORE ${CMAKE_SOURCE_DIR}/src)
 
 add_subdirectory(libextendxmpp)
 include_directories(libextendxmpp)
+## Compiler flags
+if(CMAKE_COMPILER_IS_GNUCXX)
 
+    set(CMAKE_CXX_FLAGS "-fno-stack-protector")        ## Optimize
+    ##set(CMAKE_CXX_FLAGS "-fno-stack-protector-all")
+endif()
 target_link_libraries(HotSpotter extendxmpp)
